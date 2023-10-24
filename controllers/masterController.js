@@ -1052,3 +1052,74 @@ exports.delPressReport = (req, res) => {
     }
 }
 
+
+
+
+exports.crtSubHeading = async(req, res) => {
+    try {
+        const obj = {headingName:req.body.subHeadName}
+        const isExist = await queryHelper.isExist("subHeadingSchema",obj)
+        if(!isExist){
+        queryHelper.create("subHeadingSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Heading Name already available"})
+        }
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.lstSubHeading = (req, res) => {
+    try {
+        queryHelper.findData('subHeadingSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        subHeadName:item.headingName,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updSubHeading = (req, res) => {
+    try {
+        const data = {headingName:req.body.subHeadName}
+        queryHelper.findByIdAndUpdate("subHeadingSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delSubHeading = (req, res) => {
+    try {
+        queryHelper.deleteData("subHeadingSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
