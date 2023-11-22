@@ -22,6 +22,11 @@ theaterRoute.post("/crtThrOffScrnRo",common.tokenMiddleVerify,nodeValidator.post
 
 theaterRoute.patch("/editThrOffScrRo/:id",common.tokenMiddleVerify,controller.editThrOffScrRo)
 
+theaterRoute.get("/listThrOffScrRo",common.tokenMiddleVerify,controller.listThrOffScrRo)
+
+theaterRoute.get('/isThrOffScrRoGenerated/:id',common.tokenMiddleVerify , controller.fetchoffScrnTheaterROGenerated); 
+
+theaterRoute.delete("/delThrOffScrRo/:id",common.tokenMiddleVerify,controller.delThrOffScrRo)
 
 
 
