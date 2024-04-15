@@ -1532,3 +1532,84 @@ exports.delBusAdsCategory = (req, res) => {
         res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
     }
 }
+
+exports.crtAdvtEdition = async(req, res) => {
+    try {
+        const obj = {editionName:req.body.advtEditionName}
+        const data ={
+            adsProviderId:req.body.advtProId,
+            editionTypeId:req.body.editionId,
+            editionName:req.body.advtEditionName,
+            editionState:req.body.advtEditionState,
+            editionCity:req.body.advtEditionCity,
+            frequency:req.body.frequency,
+            mediaDisc:req.body.mediaDisc,
+            mediaRate:req.body.mediaRate
+        }
+        const isExist = await queryHelper.isExist("advtEditionSchema",obj)
+        if(!isExist){
+        queryHelper.create("advtEditionSchema",data,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Edition Name already available"})
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstAdvtEdition = (req, res) => {
+    try {
+        queryHelper.findData('advtEditionSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        advtProId:item.adsProviderId,
+                        editionId:item.editionTypeId,
+                        advtEditionName:item.editionName,
+                        advtEditionState:item.editionState,
+                        advtEditionCity:item.editionCity,
+                        frequency:item.frequency,
+                        mediaDisc:item.mediaDisc,
+                        mediaRate:item.mediaRate,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updAdvtEdition = (req, res) => {
+    try {
+        const data = req.body
+        queryHelper.findByIdAndUpdate("advtEditionSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delAdvtEdition = (req, res) => {
+    try {
+        queryHelper.deleteData("advtEditionSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}

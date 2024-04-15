@@ -142,5 +142,12 @@ router.get('/lstAdsCategory', common.tokenMiddleVerify,masterController.lstAdsCa
 router.patch('/updBusAdsCategory', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updBusAdsCategory);
 router.delete('/delBusAdsCategory/:id', masterController.delBusAdsCategory);
 
+//Advt Edition Type - lookup
+
+router.post('/crtAdvtEditionType', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crtAdvtEditionType);
+router.get('/lstAdvtEditionType', common.tokenMiddleVerify,masterController.lstAdvtEditionType);
+router.patch('/updAdvtEditionType', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updAdvtEditionType);
+router.delete('/delAdvtEditionType/:id', masterController.delAdvtEditionType);
+
 
 module.exports = router;
