@@ -480,6 +480,130 @@ exports.getJson = async (req, res) => {
     }
 }
 
+exports.sendMailLambda2 = async (req, res) => {
+    console.log(req,"reqqq")
+    const { senderEmail, senderName, message, base64Data, date } = req.body;
+      console.log(base64Data,"base64Data")
+      const AWS = require('aws-sdk');
+      const base64RemoveDataURI = base64Data.replace(
+        "data:application/pdf;base64,",
+        ""
+      );
+    
+      let transporter = nodemailer.createTransport({
+        SES: new AWS.SES({
+            secretAccessKey:"qUHkU1ixZml1Bg2DmYCBKccP9qOyW8WOPjcCeJBV",
+        accessKeyId:"AKIA3FLDZZEELHUS6JTK",
+        region: "ap-south-1"
+         }),
+      });
+    
+      let emailProps = await transporter.sendMail({
+        from: "pankaj@cortexmarketing.in",
+        to: "gokul@cortexmarketing.in",
+        subject: "subject",
+        text: "message",
+        html: "<div>" + "message" + "</div>",
+        attachments: [
+          {
+            filename: "TEST_FILE_NAME.pdf",
+            content: base64RemoveDataURI,
+            encoding: "base64",
+          },
+        ],
+      });
+    
+      return emailProps;
+}
+
+
+exports.sendPDFFRomS3 = async (req, res) => {
+  
+  const params = {
+    Destination: {
+      ToAddresses: ['gokul@cortexmarketing.in']
+    },
+    Message: {
+      Body: {
+        Text: {
+          Data: 'Please find the attached invoice.'
+        }
+      },
+      Subject: {
+        Data: 'Invoice Attached'
+      }
+    },
+    Source: 'pankaj@cortexmarketing.in',
+    ReplyToAddresses: ['pankaj@cortexmarketing.in'],
+    Attachments: [
+      {
+        Filename: 'invoice.pdf',
+        Body: {
+          Bucket: 'generalasset',
+          Key: 'https://generalasset.s3.amazonaws.com/Invoice_1616529341.pdf'
+        }
+      }
+    ]
+  };
+  
+  ses.sendEmail(params, (err, data) => {
+    if (err) console.log(err, err.stack);
+    else console.log('Email sent successfully', data);
+  });
+   
+}
+
+
+exports.sendMailWithAtt  = async(req,res) =>{  
+    try {
+
+      //sample response for attachment
+      // {"fileAttachment":[{"fileUrl":"https://generalasset.s3.amazonaws.com/SampleXLSFile_19kb.xls","fileName":"SampleXLSFile_19kb.xls"},{"fileUrl":"https://generalasset.s3.amazonaws.com/SampleDOCFile_100kb.doc","fileName":"SampleDOCFile_100kb.doc"},{"fileUrl":"https://generalasset.s3.amazonaws.com/SamplePNGImage_1mbmb.png","fileName":"SamplePNGImage_1mbmb.png"},{"fileUrl":"https://generalasset.s3.amazonaws.com/WhatsApp+Image+2024-03-28+at+7.05.49+PM.jpeg","fileName":"WhatsApp+Image.jpeg"},{"fileUrl":"https://generalasset.s3.amazonaws.com/mailtemp.html","fileName":"mailtemp.html"}],"receiverMailId":"gokul@cortexmarketing.in","mailSubject":"tesing mail subject"}      
+      
+      const {fileAttachment,receiverMailId,mailSubject} = req.body
+
+      const createMultiAttRaw = await Promise.all(fileAttachment.map(async (item, i) => {
+        try {
+            const response = await axios.get(item.fileUrl, {
+                responseType: 'arraybuffer'
+            });
+            const attachmentContent = Buffer.from(response.data, 'binary').toString('base64');
+            let contentType = 'application/octet-stream'; // Default content type for unknown files
+            // Determine the content type based on file extension
+            if (item.fileName.endsWith('.pdf')) {
+                contentType = 'application/pdf';
+            } else if (item.fileName.endsWith('.jpg') || item.fileName.endsWith('.jpeg')) {
+                contentType = 'image/jpeg';
+            } else if (item.fileName.endsWith('.png')) {
+                contentType = 'image/png';
+            }
+            
+            return (
+                `--NextPart\n` +
+                `Content-Type: ${contentType}; name="${item.fileName}"\n` +
+                `Content-Disposition: attachment; filename="${item.fileName}"\n` +
+                `Content-Transfer-Encoding: base64\n\n` +
+                `${attachmentContent}\n\n`
+            );
+    
+        } catch (error) {
+            console.error(`Error fetching file ${item.fileUrl}:`, error);
+            return null;
+        }
+    }));
+
+      const attachmentsData = createMultiAttRaw.join('');
+      const emailResponse = await sendEmailWithAttachment(receiverMailId, mailSubject,  attachmentsData);
+      console.log('Email sent successfully:', emailResponse);
+      res.json({status:true,message:"Email sent successfully",emailResponse})
+
+    } catch (err) {
+      res.json({status:false,message:"Failed to send mail",err:err})
+
+      console.error('Error sending email:', err);
+    }
+}
+
 
 
 

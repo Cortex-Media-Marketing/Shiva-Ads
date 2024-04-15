@@ -31,6 +31,22 @@ theaterRoute.delete("/delThrOffScrRo/:id",common.tokenMiddleVerify,controller.de
 theaterRoute.post("/s3Upload",upload.single('file'),controller.s3Upload)
 
 
+////USE THIS API TO SEND THE BASE 64 VALUE OF FILE TO S3 AFTER THAT SEND THE BASE 64 VALUE TO MAIL VIA SES
+
+theaterRoute.post("/sendMailSES",controller.sendMailSES)
+
+theaterRoute.post("/s3UploadBase64",controller.s3UploadBase64)
+
+theaterRoute.post("/getJson",controller.getJson)
+
+theaterRoute.post("/sendMailLambda",controller.sendMailLambda)
+
+
+//USE THIS API TO SEND MAIL WITH SINGLE/MULTI ATTACHMENT -- ATTACHMENT FILE WILL COME FROM S3
+
+theaterRoute.post("/sendMailWithAtt",controller.sendMailWithAtt)
+
+theaterRoute.post("/htmlToPDF",controller.htmlToPDF)
 
 
 
