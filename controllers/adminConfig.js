@@ -530,7 +530,6 @@ exports.addDiscountCategory = async (req, res) => {
 
     try {
         const { name } = req.body;
-       
         const exDiscountCategory = await DiscountCategoryModel.findOne({name});
         if (exDiscountCategory) {
             return res.json({ "status": false, message: 'Discount Category already exists .!!!' });
@@ -597,9 +596,7 @@ exports.ListOfDiscountCategory = async (req, res) => {
     }
 }
 
-
-
-//====================================== Notice Type  ======================================================
+//======================================  Notice Type  ======================================================
 
 exports.addNoticeType = async (req, res) => {
 
@@ -673,8 +670,7 @@ exports.ListOfNoticeType = async (req, res) => {
 }
 
 
-
-//====================================== GST %  ======================================================
+//======================================       GST %  ======================================================
 
 exports.addGST = async (req, res) => {
 

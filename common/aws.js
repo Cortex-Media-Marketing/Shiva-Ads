@@ -4,13 +4,8 @@ const s3 = new aws.S3(config.shivaAdsAWS_S3);
 aws.config.update(config.shivaAdsAWS_SES);
 const aws_SES = new aws.SES();
 
-const { Upload } = require("@aws-sdk/lib-storage");
-const { S3Client } = require("@aws-sdk/client-s3")
-
-
 exports.SendSMail = async (template, subject, listOfEmails) => {
 
-  // Create the email parameters
   const params = {
     Destination: {
       ToAddresses: listOfEmails,

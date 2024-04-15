@@ -10,7 +10,6 @@ const s3upload = multer({ storage: storage, limits: { fileSize: 1 * 1024 * 1024 
 
 route.post('/upload',s3upload.any(), uploadMultipleFiles); 
 
-
 route.post('/signUp',Validation, register); 
 
 route.get('/verify_account/:id', verifyAccount); 
@@ -21,9 +20,13 @@ route.post('/forgot_password', Validation,forgotPassword);
 
 route.post('/verify_forgot_password',Validation, verifyForgotPassword);
 
+//============================================ Email Template ======================================================
+
 route.post('/add_email_template',tokenMiddleVerify,Validation,  addRecords);
 
 route.post('/find_email_template', findRecord);
+
+
 
 route.post('/add_contact_type',tokenMiddleVerify,Validation, addContactType);
 
@@ -63,6 +66,7 @@ route.delete('/deleteDiscountCategory/:id',tokenMiddleVerify, deleteDiscountCate
 
 route.get('/listOfDiscountCategory',tokenMiddleVerify, ListOfDiscountCategory);
 
+
 //============================================ Notice Type ======================================================
 
 route.post('/addNoticeType',tokenMiddleVerify,Validation, addNoticeType);
@@ -72,6 +76,7 @@ route.patch('/editNoticeType',tokenMiddleVerify,Validation, updateNoticeType);
 route.delete('/deleteNoticeType/:id',tokenMiddleVerify, deleteNoticeType);
 
 route.get('/listOfNoticeType',tokenMiddleVerify, ListOfNoticeType);
+
 
 //============================================  GST ======================================================
 
