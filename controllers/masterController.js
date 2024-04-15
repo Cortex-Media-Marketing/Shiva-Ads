@@ -1123,3 +1123,137 @@ exports.delSubHeading = (req, res) => {
     }
 }
 
+
+exports.crtEditionTyp = async(req, res) => {
+    try {
+        const obj = {editionType:req.body.typeOfEdition}
+        const isExist = await queryHelper.isExist("editionSchema",obj)
+        if(!isExist){
+        queryHelper.create("editionSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Edition Type already available"})
+        }
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.lstEditionTyp = (req, res) => {
+    try {
+        queryHelper.findData('editionSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        typeOfEdition:item.editionType,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updEditionTyp = (req, res) => {
+    try {
+        const data = {editionType:req.body.typeOfEdition}
+        queryHelper.findByIdAndUpdate("editionSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delEditionTyp = (req, res) => {
+    try {
+        queryHelper.deleteData("editionSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.crtFMProgram = async(req, res) => {
+    try {
+        const obj = {prgName:req.body.programName,startTime:req.body.fromTime,endTime:req.body.toTime}
+        const isExist = await queryHelper.isExist("fmProgramSchema",obj)
+        if(!isExist){
+        queryHelper.create("fmProgramSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Record already exist"})
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstFMProgram = (req, res) => {
+    try {
+        queryHelper.findData('fmProgramSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        programName:item.prgName,
+                        fromTime:item.startTime,
+                        toTime:item.endTime,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updFMProgram = (req, res) => {
+    try {
+        const data = req.body
+        queryHelper.findByIdAndUpdate("fmProgramSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+    }  catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delFMProgram = (req, res) => {
+    try {
+        queryHelper.deleteData("fmProgramSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}

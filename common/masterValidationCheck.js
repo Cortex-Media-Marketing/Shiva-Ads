@@ -123,6 +123,34 @@ exports.postValidation = (req, res, next) => {
             check = validator.isObject()
             .withOptional('subHeadName', validator.isString({ regex: emptycheck, message: "subHeadName is required" }))
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtEditionTyp') {
+            check = validator.isObject()
+                .withRequired('typeOfEdition', validator.isString({ regex: emptycheck, message: "typeOfEdition is required" }))
+        }else if(path == "/updEditionTyp"){
+            check = validator.isObject()
+            .withOptional('typeOfEdition', validator.isString({ regex: emptycheck, message: "typeOfEdition is required" }))
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtAdvtEdition') {
+            check = validator.isObject()
+            .withRequired('advtProId', validator.isString({ regex: emptycheck, message: "advtProId is required" }))
+            .withRequired('editionId', validator.isString({ regex: emptycheck, message: "editionId is required" }))
+            .withRequired('advtEditionName', validator.isString({ regex: emptycheck, message: "advtEditionName is required" }))
+            .withRequired('advtEditionState', validator.isString({ regex: emptycheck, message: "advtEditionState is required" }))
+            .withRequired('advtEditionCity', validator.isString({ regex: emptycheck, message: "advtEditionCity is required" }))
+            .withRequired('frequency', validator.isString({ regex: emptycheck, message: "frequency is required" }))
+            .withRequired('mediaDisc', validator.isString({ regex: emptycheck, message: "mediaDisc is required" }))
+            .withRequired('mediaRate', validator.isString({ regex: emptycheck, message: "mediaRate is required" }))
+        }else if(path == "/updAdvtEdition"){
+            check = validator.isObject()
+            .withOptional('adsProviderId', validator.isString())
+            .withOptional('editionTypeId', validator.isString())
+            .withOptional('editionName', validator.isString())
+            .withOptional('editionState', validator.isString())
+            .withOptional('editionCity', validator.isString())
+            .withOptional('frequency', validator.isString())
+            .withOptional('mediaDisc', validator.isString())
+            .withOptional('mediaRate', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {

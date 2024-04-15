@@ -112,5 +112,11 @@ router.get('/lstSubHeading', common.tokenMiddleVerify,masterController.lstSubHea
 router.patch('/updSubHeading',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updSubHeading);
 router.delete('/delSubHeading/:id',common.tokenMiddleVerify, masterController.delSubHeading);
 
+//FM program list 
+router.post('/crtFMProgram', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crtFMProgram);
+router.get('/lstFMProgram', common.tokenMiddleVerify,masterController.lstFMProgram);
+router.patch('/updFMProgram', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updFMProgram);
+router.delete('/delFMProgram/:id',common.tokenMiddleVerify, masterController.delFMProgram);
+
 
 module.exports = router;
