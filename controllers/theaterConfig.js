@@ -323,6 +323,164 @@ try{
 }
 }
 
+exports.sendMailSES = async (req, res) => {
+    try {
+
+        const AWS = require('aws-sdk');
+        
+        
+        const emailParams = {
+            from: 'pankaj@cortexmarketing.in',
+            to: 'gokul@cortexmarketing.in',
+            subject: 'SES Email with S3 Attachment',
+            text: '<h1>This is a test email sent from SES with an attachment from S3.</h1>'
+          };
+          
+        
+         
+
+        const ses = new AWS.SES({
+          secretAccessKey:"BETniYVUfOBLoirnlrQpv2p8meqz15eeximqhuIL",
+        accessKeyId:"AKIA3FLDZZEEITOC24G7",
+          // secretAccessKey:"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",
+          // accessKeyId:"AKIA3FLDZZEELHUS6JTK",
+          region: "ap-south-1"
+        });
+        sendEmailWithAttachment(emailParams, "data");
+        async function sendEmailWithAttachment(emailParams,data) {
+          const params = {
+            Source: emailParams.from,
+            Destinations: [emailParams.to],
+            RawMessage: {
+              Data:  `From: gokul@cortexmarketing.in\n` +
+              `To: ${emailParams.to}\n` +
+              `Subject: test subject\n` +
+              `MIME-Version: 1.0\n` +
+              `Content-Type: multipart/mixed; boundary="NextPart"\n\n` +
+              `--NextPart\n` +
+              `Content-Type: text/plain\n\n` +
+              `--NextPart\n`
+            }
+
+          };
+        console.log(params,"para")
+          try {
+            const data = await ses.sendRawEmail(params).promise();
+            console.log('Email sent successfully!', data);
+          } catch (error) {
+            console.error('Error sending email:', error);
+          }
+        }
+        
+    } catch (e) {
+        console.log(e, "err")
+        res.json({ status: false, message: "Oops, something went wrong" });
+    }
+}
+
+exports.sendMailLambda = async (req, res) => {
+    try {
+        const {fileName} = req.body;
+        const fileBase64 = await Promise.all(fileName.map(async (item) => {
+          return new Promise((resolve, reject) => {
+              const params = {
+                  Bucket: "generalasset",
+                  Key: item.name,
+              };
+      
+              s3.getObject(params, (err, data) => {
+                  if (err) {
+                      reject(err); 
+                  } else {
+                      const base64 = data.Body;
+                      const buffer = Buffer.from(base64);
+                      const base64EncodedData = buffer.toString('base64');
+                      const fNameRmvExt = item.name.replace(".txt","")
+                      const rmveEpoch = fNameRmvExt.split("#")
+                      console.log(rmveEpoch,"rmveEpoch")
+                      resolve({ 
+                        contentBase64: base64EncodedData,
+                        // fileName:fNameRmvExt,
+                        fileName:rmveEpoch[1]
+
+                       }); 
+                  }
+              });
+          });
+      }));
+      
+
+        const fromMail="pankaj@cortexmarketing.in";
+        const toMail="gokul@cortexmarketing.in";
+
+        const attachmentParts = fileBase64.map(attachment => {
+          return (
+            `--NextPart\n` +
+            `Content-Type: application/octet-stream; name="${attachment.fileName}"\n` +
+            `Content-Disposition: attachment; filename="${attachment.fileName}"\n` +
+            `Content-Transfer-Encoding: base64\n\n` +
+            `${attachment.contentBase64}\n\n`
+          );
+        });
+        
+        const attachmentsData = attachmentParts.join('');
+        
+        const rawEmailMessage = {
+          Source: fromMail,
+          Destinations: [toMail],
+          RawMessage: {
+            Data: `From: ${fromMail}\n` +
+                  `To: ${toMail}\n` +
+                  `Subject: ${"subject"}\n` +
+                  `MIME-Version: 1.0\n` +
+                  `Content-Type: multipart/mixed; boundary="NextPart"\n\n` +
+                  `--NextPart\n` +
+                  `Content-Type: text/plain\n\n` +
+                  `Hello,\n\n` +
+                  `Please find the attached files.\n\n` +
+                  `${attachmentsData}` + 
+                  `--NextPart--`
+          }
+        };
+
+
+    const response = await ses.sendRawEmail(rawEmailMessage).promise();
+    console.log('Email sent successfully:', response.MessageId);
+    res.json({status:true,message:"Email sent successfully",msgId:response.MessageId})
+
+    } catch (e) {
+        console.log(e, "err")
+        res.json({ status: false, message: "Oops, something went wrong" });
+    }
+}
+
+exports.getJson = async (req, res) => {
+    try {
+
+        
+        const params = {
+            Bucket: "generalasset",
+            Key: `1711624646_sandbox creation process-1.pdf.txt`,
+        }
+        s3.getObject(params, (err, data) => {
+            if (err) {
+              res.json({status:false,"message":"unable to fetch the record","error":err});
+            } else {
+                console.log(data,"dd")
+                const base64 = data.Body; // Your array of integers representing file data
+                const buffer = Buffer.from(base64); // Create a buffer from the array of integers
+                const base64EncodedData = buffer.toString('base64'); // Convert the buffer to a base64-encoded string
+              res.json({status:true,data:base64EncodedData})
+            }
+        });
+
+    } catch (e) {
+        console.log(e, "err")
+        res.json({ status: false, message: "Oops, something went wrong" });
+    }
+}
+
+
 
 
 
