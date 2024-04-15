@@ -82,6 +82,15 @@ exports.postValidation = (req, res, next) => {
             check = validator.isObject()
             .withOptional('depName', validator.isString({ regex: emptycheck, message: "depName is required" }))
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtDesignation') {
+            check = validator.isObject()
+            .withRequired('departmentId', validator.isString({ regex: emptycheck, message: "departmentId is required" }))
+            .withRequired('designationName', validator.isString({ regex: emptycheck, message: "designationName is required" }))
+        }else if(path == "/updDesignation"){
+            check = validator.isObject()
+            .withOptional('depId', validator.isString())
+            .withOptional('desName', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {

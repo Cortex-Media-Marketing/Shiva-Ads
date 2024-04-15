@@ -68,5 +68,11 @@ router.patch('/updDepartment',nodeValidator.postValidation,common.tokenMiddleVer
 router.delete('/delDepartment/:id', masterController.delDepartment);
 
 
+//Designation -c 
+router.post('/crtDesignation', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crtDesignation);
+router.get('/lstDesignation', common.tokenMiddleVerify,masterController.lstDesignation);
+router.patch('/updDesignation',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updDesignation);
+router.delete('/delDesignation/:id', masterController.delDesignation);
+
 
 module.exports = router;

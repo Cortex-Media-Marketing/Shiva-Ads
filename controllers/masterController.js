@@ -716,3 +716,101 @@ exports.delDepartment = (req, res) => {
     }
 }
 
+
+exports.crtDesignation = async(req, res) => {
+    try {
+        const obj = {desName:req.body.designationName,depId:req.body.departmentId}
+        const isExist = await queryHelper.isExist("designationSchema",{desName:req.body.designationName})
+        if(!isExist){
+        queryHelper.create("designationSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Designation Name already exist"})
+        }
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstDesignation = (req, res) => {
+    try {
+
+        designation.aggregate([
+            {$lookup:{ 
+             from: config.dbPrefix + 'AMEHCSEMANPED',
+             let: { depId: { $toObjectId: "$depId" } },
+             pipeline: [ { $match: { $expr: { $eq: ["$_id", "$$depId"] }}}],
+             as: "depName"
+            }},
+            {
+                $project:{
+                    _id:1,
+                    depName: { $arrayElemAt: ["$depName.departmentName", 0] } ,
+                    designationName:'$desName',
+                    departmentId:'$depId',
+                    createdAt:'$createdAt'
+                }
+            }
+
+        ]).then((resp)=>{
+            if(resp.length>0){
+                res.json({status:true,message:"Available List",data:resp})
+            }else{
+                 res.json({status:false,message:"No Data Available"})
+            }
+        }).catch((err) => {
+            console.error("Error during aggregation:", err);
+            res.json({status:false,message:"Error while fetching"})
+        });
+
+        // queryHelper.findData('designationSchema', {}, {}, 0, (resp) => {
+        //     if(resp.status){
+        //         const updatedValue = resp.data.map((item,i)=>{
+        //             return{
+        //                 id:item._id,
+        //                 designationName:item.desName,
+        //                 departmentId:item.depId,
+        //                 createdAt:item.createdAt
+        //             }
+        //         })
+        //         res.json({status:true,message:"Available List",data:updatedValue})
+        //     }else{
+        //         res.json(resp)
+        //     }
+           
+        // })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updDesignation = (req, res) => {
+    try {
+        const data = req.body
+        queryHelper.findByIdAndUpdate("designationSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delDesignation = (req, res) => {
+    try {
+        queryHelper.deleteData("designationSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
