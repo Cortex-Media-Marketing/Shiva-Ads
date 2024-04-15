@@ -1613,3 +1613,77 @@ exports.delAdvtEdition = (req, res) => {
         res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
     }
 }
+
+exports.crtAdvtEditionType = async(req, res) => {
+    try {
+        const obj = {editionName:req.body.advtEditionName,catId:req.body.categoryId}       
+        const isExist = await queryHelper.isExist("adsEditionSchema",obj)
+        if(!isExist){
+        queryHelper.create("adsEditionSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Edition Name already available"})
+        }
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstAdvtEditionType = (req, res) => {
+    try {
+
+         
+        queryHelper.findData('adsEditionSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        categoryId:item.catId,
+                        advtEditionName:item.editionName,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updAdvtEditionType = (req, res) => {
+    try {
+        const data = req.body
+        queryHelper.findByIdAndUpdate("adsEditionSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delAdvtEditionType = (req, res) => {
+    try {
+        queryHelper.deleteData("adsEditionSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+

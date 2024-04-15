@@ -149,5 +149,12 @@ router.get('/lstAdvtEditionType', common.tokenMiddleVerify,masterController.lstA
 router.patch('/updAdvtEditionType', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updAdvtEditionType);
 router.delete('/delAdvtEditionType/:id', masterController.delAdvtEditionType);
 
+// Ads prov
+
+router.post('/crtscreen',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.crtscreen);
+router.get('/lstscreen',common.tokenMiddleVerify, masterController.lstscreen);
+router.patch('/updscreen',common.tokenMiddleVerify,nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updscreen);
+router.delete('/delscreen/:id',common.tokenMiddleVerify, masterController.delscreen);
+
 
 module.exports = router;

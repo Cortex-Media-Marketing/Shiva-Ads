@@ -222,6 +222,16 @@ exports.postValidation = (req, res, next) => {
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
 
+        else if (path == '/crtscreen') {
+            check = validator.isObject()
+                .withRequired('screenName', validator.isString({ regex: emptycheck, message: "screenName is required" }))
+
+        }else if(path == "/updscreen"){
+            check = validator.isObject()
+            .withOptional('screenName', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }
+
         
         validator.run(check, data, (errorcount, errors) => {
             if (errorcount == 0) {
