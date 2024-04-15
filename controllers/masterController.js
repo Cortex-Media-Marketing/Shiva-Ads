@@ -196,3 +196,74 @@ exports.delSchema = (req, res) => {
         res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
     }
 }
+
+exports.crtCategory = async(req, res) => {
+    try {
+        const obj = {categoryName:req.body.catName}
+        const isExist = await queryHelper.isExist("categorySchema",obj)
+        if(!isExist){
+        queryHelper.create("categorySchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"category Name already exist"})
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.lstCategory = (req, res) => {
+    try {
+        queryHelper.findData('categorySchema', {}, {}, 0, async(resp) => {
+            if(resp.status){
+                const updatedValue = await resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        catName:item.categoryName,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updCategory = (req, res) => {
+    try {
+        queryHelper.updateData("categorySchema","one",{_id:new mongoose.Types.ObjectId(req.body.id)},{"categoryName":req.body.catName},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delCategory = async(req, res) => {
+    try {
+        const obj = {categoryId:req.params.id}
+        console.log(obj,"obj")
+        const isExist = await queryHelper.isExist("busCategorySchema",obj)
+        console.log(isExist,"isExist")
+        if(!isExist){
+            res.json({status:false,message:"Category is assigned to business"})
+        }else{
+            queryHelper.deleteData("categorySchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+                res.json(data)
+            })
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}

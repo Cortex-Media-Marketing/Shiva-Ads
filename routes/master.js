@@ -23,5 +23,13 @@ router.get('/lstSchema', common.tokenMiddleVerify,masterController.lstSchema);
 router.patch('/updSchema', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updSchema);
 router.delete('/delSchema/:id',common.tokenMiddleVerify, masterController.delSchema);
 
+//category -c
+router.post('/crtCategory',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.crtCategory);
+router.get('/lstCategory', common.tokenMiddleVerify,masterController.lstCategory);
+router.patch('/updCategory',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updCategory);
+//delCheck
+router.delete('/delCategory/:id',common.tokenMiddleVerify,  masterController.delCategory);
+
+
 
 module.exports = router;
