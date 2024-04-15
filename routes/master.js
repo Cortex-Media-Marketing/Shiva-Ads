@@ -124,5 +124,11 @@ router.get('/lstDisBand',common.tokenMiddleVerify, masterController.lstDisBand);
 router.patch('/updDisBand', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updDisBand);
 router.delete('/delDisBand/:id',common.tokenMiddleVerify, masterController.delDisBand);
 
+//Brand - lookup waiting for clientId
+router.post('/crtBrand',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.crtBrand);
+router.get('/lstBrand',common.tokenMiddleVerify, masterController.lstBrand);
+router.patch('/updBrand',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updBrand);
+router.delete('/delBrand/:id', common.tokenMiddleVerify,masterController.delBrand);
+
 
 module.exports = router;

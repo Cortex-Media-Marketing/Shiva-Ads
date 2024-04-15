@@ -172,6 +172,17 @@ exports.postValidation = (req, res, next) => {
             .withOptional('catId', validator.isString())
             .withOptional('editionName', validator.isString())
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtDisBand') {
+            check = validator.isObject()
+                .withRequired('distributionName', validator.isString({ regex: emptycheck, message: "distributionName is required" }))
+                .withRequired('clientUniId', validator.isString({ regex: emptycheck, message: "clientUniId is required" }))
+                .withRequired('programUniId', validator.isString({ regex: emptycheck, message: "programUniId is required" }))
+        }else if(path == "/updDisBand"){
+            check = validator.isObject()
+            .withOptional('distriName', validator.isString())
+            .withOptional('clientId', validator.isString())
+            .withOptional('programId', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {
