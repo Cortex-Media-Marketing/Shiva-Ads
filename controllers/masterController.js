@@ -1687,3 +1687,74 @@ exports.delAdvtEditionType = (req, res) => {
 }
 
 
+
+
+exports.crtscreen = async(req, res) => {
+    try {
+        const obj = {screen:req.body.screenName}       
+        const isExist = await queryHelper.isExist("screenSchema",obj)
+        if(!isExist){
+        queryHelper.create("screenSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Edition Name already available"})
+        }
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstscreen = (req, res) => {
+    try {
+        queryHelper.findData('screenSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        screenName:item.screen,
+                        createdAt:item.createdAt
+                      
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updscreen = (req, res) => {
+    try {
+        const data = {screen:req.body.screenName}
+        queryHelper.findByIdAndUpdate("screenSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delscreen = (req, res) => {
+    try {
+        queryHelper.deleteData("screenSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
