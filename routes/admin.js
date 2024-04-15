@@ -20,8 +20,6 @@ route.post('/forgot_password', Validation,forgotPassword);
 
 route.post('/verify_forgot_password',Validation, verifyForgotPassword);
 
-//============================================ Email Template ======================================================
-
 route.post('/add_email_template',tokenMiddleVerify,Validation,  addRecords);
 
 route.post('/find_email_template', findRecord);

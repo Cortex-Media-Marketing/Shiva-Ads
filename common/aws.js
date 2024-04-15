@@ -4,8 +4,10 @@ const s3 = new aws.S3(config.shivaAdsAWS_S3);
 aws.config.update(config.shivaAdsAWS_SES);
 const aws_SES = new aws.SES();
 
+
 exports.SendSMail = async (template, subject, listOfEmails) => {
 
+  // Create the email parameters
   const params = {
     Destination: {
       ToAddresses: listOfEmails,
