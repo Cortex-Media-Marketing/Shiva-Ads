@@ -30,6 +30,11 @@ router.patch('/updCategory',nodeValidator.postValidation,common.tokenMiddleVerif
 //delCheck
 router.delete('/delCategory/:id',common.tokenMiddleVerify,  masterController.delCategory);
 
+//BusinessCategory -  
+router.post('/crtBusCategory', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crtBusCategory);
+router.get('/lstBusCategory', common.tokenMiddleVerify, masterController.lstBusCategory);
+router.patch('/updBusCategory',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updBusCategory);
+router.delete('/delBusCategory/:id', common.tokenMiddleVerify,masterController.delBusCategory);
 
 
 module.exports = router;

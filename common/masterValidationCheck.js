@@ -36,6 +36,15 @@ exports.postValidation = (req, res, next) => {
             check = validator.isObject()
             .withRequired('catName', validator.isString({ regex: emptycheck, message: "bName is required" }))
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtBusCategory') {
+            check = validator.isObject()
+                .withRequired('busCatName', validator.isString({ regex: emptycheck, message: "busCatName is required" }))
+                .withRequired('catId', validator.isString({ regex: emptycheck, message: "catId is required" }))
+        }else if(path == "/updBusCategory"){
+            check = validator.isObject()
+            .withOptional('businessCatName', validator.isString())
+            .withOptional('categoryId', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {

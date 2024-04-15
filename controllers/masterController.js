@@ -267,3 +267,158 @@ exports.delCategory = async(req, res) => {
         res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
     }
 }
+
+exports.crtBusCategory = async(req, res) => {
+    try {
+
+        const obj = {businessCatName:req.body.busCatName,categoryId:req.body.catId}
+        const isExist = await queryHelper.isExist("busCategorySchema",{businessCatName:req.body.busCatName,categoryId:req.body.catId})
+        if(!isExist){
+        queryHelper.create("busCategorySchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Business Category Name already exist"})
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.lstBusCategory = (req, res) => {
+    try {
+        // queryHelper.findData('busCategorySchema', {}, {}, 0, async(resp) => {
+        //     if(resp.status){
+                // const updatedValue = await resp.data.map((item,i)=>{
+                //     return{
+                //         id:item._id,
+                //         busCatName:item.businessCatName,
+                //         catId:item.categoryId,
+                //         createdAt:item.createdAt
+                //     }
+                // })
+            // }else{
+            //     res.json(resp)
+            // }
+        // })
+        busCategory.aggregate([
+            {$lookup:{ 
+             from: config.dbPrefix + 'AMEHCSYROGETAC',
+             let: { categoryId: { $toObjectId: "$categoryId" } },
+             pipeline: [ { $match: { $expr: { $eq: ["$_id", "$$categoryId"] }}}],
+             as: "categoryList"
+            }},
+            {
+                $project:{
+                    _id:1,
+                    categoryName: { $arrayElemAt: ["$categoryList.categoryName", 0] } ,
+                    busCatName:'$businessCatName',
+                    catId:'$categoryId',
+                    createdAt:'$createdAt'
+                }
+            }
+
+        ]).then((resp)=>{
+            if(resp.length>0){
+                res.json({status:true,message:"Available List",data:resp})
+            }else{
+                 res.json({status:false,message:"No Data Available"})
+            }
+        }).catch((err) => {
+            console.error("Error during aggregation:", err);
+            res.json({status:false,message:"Error while fetching"})
+        });
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updBusCategory = (req, res) => {
+    try {
+        const data = req.body
+        queryHelper.findByIdAndUpdate("busCategorySchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+        res.json(resp)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delBusCategory = (req, res) => {
+    try {
+        queryHelper.deleteData("busCategorySchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.crtAdvtType = async(req, res) => {
+    try {
+        const obj = {adsType:req.body.advertisementType}
+        const isExist = await queryHelper.isExist("advtTypeSchema",obj)
+        if(!isExist){
+        queryHelper.create("advtTypeSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Advertisement type already exist"})
+        }
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstAdvtType = (req, res) => {
+    try {
+        queryHelper.findData('advtTypeSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        advertisementType:item.adsType,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updAdvtType = (req, res) => {
+    try {
+        const data = {adsType:req.body.advertisementType}
+        queryHelper.findByIdAndUpdate("advtTypeSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+    }catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delAdvtType = (req, res) => {
+    try {
+        queryHelper.deleteData("advtTypeSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
