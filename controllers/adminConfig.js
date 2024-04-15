@@ -25,7 +25,7 @@ exports.uploadMultipleFiles = async (req, res) => {
         if (req.files && req.files.length != 0) {
             uploadedFiles = await Promise.all((req.files).map(async (file) => {
                 return await new Promise((resolve) => {
-                    //console.log(file)
+                    console.log(file)
                     fileUpload(file, (uploadData) => {
                         //console.log(uploadData)
                         if (uploadData.status) {
