@@ -1508,3 +1508,27 @@ exports.lstAdsCategory = (req, res) => {
         res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
     }
 }
+
+exports.updBusAdsCategory = (req, res) => {
+    try {
+        const data ={ catName:req.body.categoryName }
+        queryHelper.findByIdAndUpdate("adsCatSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delBusAdsCategory = (req, res) => {
+    try {
+        queryHelper.deleteData("adsCatSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}

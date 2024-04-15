@@ -201,7 +201,15 @@ exports.postValidation = (req, res, next) => {
             .withOptional('evntName', validator.isString())
             .withOptional('clientId', validator.isString())
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtAdsCategory') {
+            check = validator.isObject()
+                .withRequired('categoryName', validator.isString({ regex: emptycheck, message: "categoryName is required" }))
+        }else if(path == "/updBusAdsCategory"){
+            check = validator.isObject()
+            .withOptional('categoryName', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
+
         
         validator.run(check, data, (errorcount, errors) => {
             if (errorcount == 0) {
