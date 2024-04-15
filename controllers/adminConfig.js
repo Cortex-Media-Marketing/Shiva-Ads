@@ -81,6 +81,7 @@ exports.register = (req, res) => {
                         }
                         let newTemp = nommoc.UpdateTemplate(temp, dataToReplace)
                         SendSMail(newTemp.body, newTemp.subject, [resp.email]);
+
                         return res.json({ "status": true, "message": "User added Successfully" });
                     })
 
@@ -213,7 +214,7 @@ exports.forgotPassword = async (req, res) => {
                 const template = newTemp.body, subject = newTemp.subject, mail = [dbUser.email]
 
                 //console.log(newTemp.body, newTemp.subject, [dbUser.email])
-                await SendSMail(template, subject, mail).then((success) => {
+                await SendSMail(template, subject, mail).then(() => {
                     res.json({ "status": true, "message": `Reset password link has been sent successfully to your email address` });
 
                 }).catch((e) => {
