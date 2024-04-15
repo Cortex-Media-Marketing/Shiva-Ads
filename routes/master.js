@@ -136,5 +136,11 @@ router.get('/lsts2Events',common.tokenMiddleVerify, masterController.lsts2Events
 router.patch('/upds2Events',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.upds2Events);
 router.delete('/dels2Events/:id',common.tokenMiddleVerify, masterController.dels2Events);
 
+//Ads category
+router.post('/crtAdsCategory', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crtAdsCategory);
+router.get('/lstAdsCategory', common.tokenMiddleVerify,masterController.lstAdsCategory);
+router.patch('/updBusAdsCategory', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updBusAdsCategory);
+router.delete('/delBusAdsCategory/:id', masterController.delBusAdsCategory);
+
 
 module.exports = router;

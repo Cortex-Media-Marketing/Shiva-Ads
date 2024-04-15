@@ -1466,3 +1466,45 @@ exports.dels2Events = (req, res) => {
         res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
     }
 }
+
+exports.crtAdsCategory = async(req, res) => {
+    try {
+        const obj = {catName:req.body.categoryName}
+        const isExist = await queryHelper.isExist("adsCatSchema",obj)
+        if(!isExist){
+        queryHelper.create("adsCatSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"category Name already exist"})
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstAdsCategory = (req, res) => {
+    try {
+        queryHelper.findData('adsCatSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        categoryName:item.catName,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
