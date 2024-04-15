@@ -1758,3 +1758,106 @@ exports.delscreen = (req, res) => {
     }
 }
 
+
+exports.crtScreenAdsprov = async(req, res) => {
+    try {
+        const obj = {usrName:req.body.userName,scrnId:req.body.screenId,disName:req.body.districtName}       
+        const isExist = await queryHelper.isExist("screenAddProvSchema",obj)
+        if(!isExist){
+        queryHelper.create("screenAddProvSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Record  already available"})
+        }
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.lstScreenAdsprov = (req, res) => {
+    try {
+
+        screenAddProv.aggregate([
+            {$lookup:{ 
+             from: config.dbPrefix + 'AMEHCSNEERCS',
+             let: { scrnId: { $toObjectId: "$scrnId" } },
+             pipeline: [ { $match: { $expr: { $eq: ["$_id", "$$scrnId"] }}}],
+             as: "screenData"
+            }},
+            {
+                $project:{
+                    _id:1,
+                    screenName: { $arrayElemAt: ["$screenData.screen", 0] } ,
+                    districtName:'$disName',
+                    userName:'$usrName',
+                    createdAt:'$createdAt',
+                    screenId: '$scrnId'
+                }
+            }
+
+        ]).then((resp)=>{
+            if(resp.length>0){
+                res.json({status:true,message:"Available List",data:resp})
+            }else{
+                 res.json({status:false,message:"No Data Available"})
+            }
+        }).catch((err) => {
+            console.error("Error during aggregation:", err);
+            res.json({status:false,message:"Error while fetching"})
+        });
+
+        // queryHelper.findData('screenAddProvSchema', {}, {}, 0, (resp) => {
+        //     if(resp.status){
+        //         const updatedValue = resp.data.map((item,i)=>{
+        //             return{
+        //                 id:item._id,
+        //                 screenId:item.scrnId,
+        //                 createdAt:item.createdAt,
+        //                 districtName:item.disName,
+        //                 userName:item.usrName
+
+                      
+        //             }
+        //         })
+        //         res.json({status:true,message:"Available List",data:updatedValue})
+        //     }else{
+        //         res.json(resp)
+        //     }
+           
+        // })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updScreenAdsprov = (req, res) => {
+    try {
+        const data =req.body
+        queryHelper.findByIdAndUpdate("screenAddProvSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delScreenAdsprov = (req, res) => {
+    try {
+        queryHelper.deleteData("screenAddProvSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+

@@ -156,5 +156,13 @@ router.get('/lstscreen',common.tokenMiddleVerify, masterController.lstscreen);
 router.patch('/updscreen',common.tokenMiddleVerify,nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updscreen);
 router.delete('/delscreen/:id',common.tokenMiddleVerify, masterController.delscreen);
 
+// Ads prov screen - lookup
+
+router.post('/crtScreenAdsprov', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crtScreenAdsprov);
+router.get('/lstScreenAdsprov',common.tokenMiddleVerify, masterController.lstScreenAdsprov);
+router.patch('/updScreenAdsprov', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updScreenAdsprov);
+router.delete('/delScreenAdsprov/:id',common.tokenMiddleVerify, masterController.delScreenAdsprov);
+
+
 
 module.exports = router;

@@ -232,6 +232,19 @@ exports.postValidation = (req, res, next) => {
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
 
+        else if (path == '/crtScreenAdsprov') {
+            check = validator.isObject()
+                .withRequired('screenId', validator.isString({ regex: emptycheck, message: "screenId is required" }))
+                .withRequired('districtName', validator.isString({ regex: emptycheck, message: "districtName is required" }))
+                .withRequired('userName', validator.isString({ regex: emptycheck, message: "userName is required" }))
+
+        }else if(path == "/updScreenAdsprov"){
+            check = validator.isObject()
+            .withOptional('scrnId', validator.isString())
+            .withOptional('disName', validator.isString())
+            .withOptional('usrName', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }
         
         validator.run(check, data, (errorcount, errors) => {
             if (errorcount == 0) {
