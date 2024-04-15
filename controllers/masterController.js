@@ -1861,3 +1861,90 @@ exports.delScreenAdsprov = (req, res) => {
     }
 }
 
+exports.crttheater = async(req, res) => {
+    try {
+        const obj = {theaterName:req.body.theaterName,addrLine1:req.body.addrLine1,dist:req.body.dist,state:req.body.state}       
+        const isExist = await queryHelper.isExist("theaterSchema",obj)
+        if(!isExist){
+        queryHelper.create("theaterSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Record  already available"})
+        }
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.lsttheater = (req, res) => {
+    try {
+        queryHelper.findData('theaterSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        theaterName:item.theaterName,
+                        addrLine1:item.addrLine1,
+                        dist:item.dist,
+                        state:item.state,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updtheater = (req, res) => {
+    try {
+        const data =req.body
+        queryHelper.findByIdAndUpdate("theaterSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.deltheater = (req, res) => {
+    try {
+        queryHelper.deleteData("theaterSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+// const updateData = {};
+
+// // Mapping between request keys and MongoDB keys
+// const keyMapping = {
+//   brandName: 'brndName',
+//   clientUniId: 'clientId',
+//   // Add more mappings as needed
+// };
+
+// // Iterate through the keys in req.body, map them, and add to updateData
+// for (const reqKey in req.body) {
+//   if (req.body.hasOwnProperty(reqKey) && req.body[reqKey]) {
+//     const mongoKey = keyMapping[reqKey];
+//     if (mongoKey) {
+//       updateData[mongoKey] = req.body[reqKey];
+//     }
+//   }
+// }

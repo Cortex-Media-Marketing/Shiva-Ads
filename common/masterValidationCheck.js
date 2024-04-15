@@ -244,6 +244,19 @@ exports.postValidation = (req, res, next) => {
             .withOptional('disName', validator.isString())
             .withOptional('usrName', validator.isString())
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtTheater') {
+            check = validator.isObject()
+            .withRequired('theaterName', validator.isString({ regex: emptycheck, message: "theaterName is required" }))
+            .withRequired('addrLine1', validator.isString({ regex: emptycheck, message: "addrLine1 is required" }))
+            .withRequired('dist', validator.isString({ regex: emptycheck, message: "dist is required" }))
+            .withRequired('state', validator.isString({ regex: emptycheck, message: "state is required" }))
+        }else if(path == "/updTheater"){
+            check = validator.isObject()
+            .withOptional('theaterName', validator.isString())
+            .withOptional('addrLine1', validator.isString())
+            .withOptional('dist', validator.isString())
+            .withOptional('state', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {

@@ -164,5 +164,11 @@ router.patch('/updScreenAdsprov', nodeValidator.postValidation,common.tokenMiddl
 router.delete('/delScreenAdsprov/:id',common.tokenMiddleVerify, masterController.delScreenAdsprov);
 
 
+//theater -c
+router.post('/crtTheater', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crttheater);
+router.get('/lstTheater',common.tokenMiddleVerify, masterController.lsttheater);
+router.patch('/updTheater',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updtheater);
+router.delete('/delTheater/:id', common.tokenMiddleVerify,masterController.deltheater);
+
 
 module.exports = router;
