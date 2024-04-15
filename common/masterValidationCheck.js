@@ -151,6 +151,27 @@ exports.postValidation = (req, res, next) => {
             .withOptional('mediaDisc', validator.isString())
             .withOptional('mediaRate', validator.isString())
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtFMProgram') {
+            check = validator.isObject()
+                .withRequired('programName', validator.isString({ regex: emptycheck, message: "programName is required" }))
+                .withRequired('fromTime', validator.isString({ regex: emptycheck, message: "fromTime is required" }))
+                .withRequired('toTime', validator.isString({ regex: emptycheck, message: "toTime is required" }))
+        }else if(path == "/updFMProgram"){
+            check = validator.isObject()
+            .withOptional('prgName', validator.isString())
+            .withOptional('startTime', validator.isString())
+            .withOptional('endTime', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }
+        else if (path == '/crtAdvtEditionType') {
+            check = validator.isObject()
+                .withRequired('advtEditionName', validator.isString({ regex: emptycheck, message: "advtEditionName is required" }))
+                .withRequired('categoryId', validator.isString({ regex: emptycheck, message: "catId is required" }))
+        }else if(path == "/updAdvtEditionType"){
+            check = validator.isObject()
+            .withOptional('catId', validator.isString())
+            .withOptional('editionName', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {

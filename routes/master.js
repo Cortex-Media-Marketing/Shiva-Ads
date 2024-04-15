@@ -118,5 +118,11 @@ router.get('/lstFMProgram', common.tokenMiddleVerify,masterController.lstFMProgr
 router.patch('/updFMProgram', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updFMProgram);
 router.delete('/delFMProgram/:id',common.tokenMiddleVerify, masterController.delFMProgram);
 
+//Distribution_band  - double lookup waiting for clientId
+router.post('/crtDisBand',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.crtDisBand);
+router.get('/lstDisBand',common.tokenMiddleVerify, masterController.lstDisBand);
+router.patch('/updDisBand', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updDisBand);
+router.delete('/delDisBand/:id',common.tokenMiddleVerify, masterController.delDisBand);
+
 
 module.exports = router;
