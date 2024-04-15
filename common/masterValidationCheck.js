@@ -15,6 +15,13 @@ exports.postValidation = (req, res, next) => {
             check = validator.isObject()
             .withRequired('bName', validator.isString({ regex: emptycheck, message: "bName is required" }))
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtIssueType') {
+            check = validator.isObject()
+                .withRequired('isuName', validator.isString({ regex: emptycheck, message: "isuName is required" }))
+        }else if(path == "/updIssueType"){
+            check = validator.isObject()
+            .withRequired('isuName', validator.isString({ regex: emptycheck, message: "bName is required" }))
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {

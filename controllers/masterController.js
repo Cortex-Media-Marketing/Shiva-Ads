@@ -1,5 +1,11 @@
 const queryHelper = require("../common/queryHelper")
 const mongoose = require('mongoose');
+const config = require("../nodedetails/config");
+const busCategory = mongoose.model("busCategorySchema")
+const pageNo = mongoose.model("pageNoSchema")
+const designation = mongoose.model("designationSchema")
+const issueSubCat = mongoose.model("issueSubCatSchema")
+const screenAddProv = mongoose.model("screenAddProvSchema")
 
 
 exports.crtBank = async(req, res) => {
@@ -64,3 +70,66 @@ exports.delBank = (req, res) => {
     }
 }
 
+
+exports.crtIssueType = async(req, res) => {
+    try {
+        const obj = {issueTypeName:req.body.isuName}
+        const isExist = await queryHelper.isExist("issueSchema",obj)
+        if(!isExist){
+        queryHelper.create("issueSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Issue Type already exist"})
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstIssueType = (req, res) => {
+    try {
+        queryHelper.findData('issueSchema', {}, {}, 0, async(resp) => {
+            if(resp.status){
+                const updatedValue = await resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        isuName:item.issueTypeName,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updIssueType = (req, res) => {
+    try {
+        queryHelper.updateData("issueSchema","one",{_id:new mongoose.Types.ObjectId(req.body.id)},{"issueTypeName":req.body.isuName},(data) => {
+            res.json(data)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delIssueType = (req, res) => {
+    try {
+        queryHelper.deleteData("issueSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
