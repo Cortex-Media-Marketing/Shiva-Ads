@@ -604,6 +604,144 @@ exports.sendMailWithAtt  = async(req,res) =>{
     }
 }
 
+async function sendEmailWithAttachment(to, subject,  attachmentContent) {
+  const rawEmail = await createRawEmail(to, subject,  attachmentContent);
+  const params = {
+    Source: "gokul@cortexmarketing.in",
+    Destinations: [to],
+    RawMessage: {
+      Data: rawEmail
+    }
+  };
+
+  return ses.sendRawEmail(params).promise();
+}
+
+function createRawEmail(to, subject, attachmentContent) {
+  const rawEmail = `From: gokul@cortexmarketing.in\n` +
+      `To: ${to}\n` +
+      `Subject: ${subject}\n` +
+      `MIME-Version: 1.0\n` +
+      `Content-Type: multipart/mixed; boundary="NextPart"\n\n` +
+      `--NextPart\n` +
+      `Content-Type: text/plain\n\n` +
+      `Hello,\n\n` +
+      `Please find the attached files.\n\n` +
+      attachmentContent +
+      `--NextPart--`;
+
+  return rawEmail;
+}
+
+
+exports.htmlToPDF  = async(req,res) =>{  
+  try {
+
+    const s3Params = {
+      Bucket:"generalasset",
+      Key: `s2media-invoice.html`
+    }
+      const s3Response = await s3.getObject(s3Params).promise();
+      htmlVal = s3Response.Body.toString('utf-8');
+
+
+
+    async function htmlToPdf(htmlString, outputPath) {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+    
+        // Set the viewport size to fit the entire content without scrolling
+        await page.setViewport({
+            width: 1920, // Adjust the width as needed
+            height: 3000, // Adjust the height as needed to fit all content
+            deviceScaleFactor: 1,
+        });
+    
+        // Set the HTML content of the page
+        await page.setContent(htmlString);
+    
+        // Generate PDF from the page content
+        await page.pdf({
+            path: outputPath,
+            format: 'A4',
+            printBackground: true,
+            displayHeaderFooter: false,
+            margin: { top: '0px', bottom: '0px', left: '0px', right: '0px' },
+            scale: 0.7, // Adjust the scale factor to fit all content
+        });
+    
+        await browser.close();
+    }
+
+// async function htmlToPdf(htmlString, outputPath) {
+
+//     // const browser = await puppeteer.launch();
+//     // const page = await browser.newPage();
+//     // await page.setContent(htmlString);
+//     // await page.pdf({ path: outputPath });
+//     // await browser.close();
+
+//     const browser = await puppeteer.launch();
+//     const page = await browser.newPage();
+
+//     // Set the viewport size to fit the entire content without scrolling
+//     await page.setViewport({
+//         width: 1200, // Adjust the width as needed
+//         height: 800, // Adjust the height as needed
+//         deviceScaleFactor: 1,
+//     });
+
+//     // Set the HTML content of the page
+//     await page.setContent(htmlString);
+
+//     // Generate PDF from the page content
+//     await page.pdf({
+//         path: outputPath,
+//         format: 'A4',
+//         printBackground: true,
+//         displayHeaderFooter: false,
+//         margin: { top: '0px', bottom: '0px', left: '0px', right: '0px' },
+//     });
+
+//     await browser.close();
+// }
+
+async function uploadToS3(filePath, fileName, bucketName) {
+    const fileContent = fs.readFileSync(filePath);
+
+    const params = {
+        Bucket: bucketName,
+        Key: fileName,
+        Body: fileContent
+    };
+
+    return s3.upload(params).promise();
+}
+
+// Example usage
+const htmlString = htmlVal
+const outputPath = 'output1.pdf';
+const fileName = 'example1.pdf';
+const bucketName = 'generalasset';
+
+// Convert HTML to PDF
+htmlToPdf(htmlString, outputPath)
+    .then(() => {
+        console.log('PDF generated successfully');
+        // Upload PDF to S3
+        return uploadToS3(outputPath, fileName, bucketName);
+    })
+    .then(data => {console.log('File uploaded to S3:', data.Location);res.json({status:true,location:data.Location})})
+    .catch(error => console.error('Error:', error));
+
+
+  
+  } catch (err) {
+    res.json({status:false,message:"Failed to send mail",err})
+
+    console.error('Error sending email:', err);
+  }
+}
 
 
 
