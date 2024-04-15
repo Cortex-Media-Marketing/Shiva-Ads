@@ -552,3 +552,98 @@ exports.delHue = (req, res) => {
         res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
     }
 }
+
+
+exports.crtPage = async(req, res) => {
+    try {
+        const obj = {pageData:req.body.pageNo,issueId:req.body.adsIssueId}
+        const isExist = await queryHelper.isExist("pageNoSchema",{pageData:req.body.pageNo})
+        if(!isExist){
+        queryHelper.create("pageNoSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"pageNo already exist"})
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstPage = (req, res) => {
+    try {
+        pageNo.aggregate([
+            {$lookup:{ 
+             from: config.dbPrefix + 'AMEHCSEUSSI',
+             let: { issueId: { $toObjectId: "$issueId" } },
+             pipeline: [ { $match: { $expr: { $eq: ["$_id", "$$issueId"] }}}],
+             as: "issueList"
+            }},
+            {
+                $project:{
+                    _id:1,
+                    issueName: { $arrayElemAt: ["$issueList.issueTypeName", 0] } ,
+                    pageNo:'$pageData',
+                    adsIssueId:'$issueId',
+                    createdAt:'$createdAt'
+                }
+            }
+
+        ]).then((resp)=>{
+            if(resp.length>0){
+                res.json({status:true,message:"Available List",data:resp})
+            }else{
+                 res.json({status:false,message:"No Data Available"})
+            }
+        }).catch((err) => {
+            console.error("Error during aggregation:", err);
+            res.json({status:false,message:"Error while fetching"})
+        });
+
+        // queryHelper.findData('pageNoSchema', {}, {}, 0, (resp) => {
+        //     if(resp.status){
+        //         const updatedValue = resp.data.map((item,i)=>{
+        //             return{
+        //                 id:item._id,
+        //                 pageNo:item.pageData,
+        //                 adsIssueId:item.issueId,
+        //                 createdAt:item.createdAt
+        //             }
+        //         })
+        //         res.json({status:true,message:"Available List",data:updatedValue})
+        //     }else{
+        //         res.json(resp)
+        //     }
+           
+        // })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updPage = (req, res) => {
+    try {
+        const data = req.body
+        queryHelper.findByIdAndUpdate("pageNoSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delPage = (req, res) => {
+    try {
+        queryHelper.deleteData("pageNoSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}

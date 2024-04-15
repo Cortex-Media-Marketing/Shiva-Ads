@@ -59,6 +59,13 @@ exports.postValidation = (req, res, next) => {
             check = validator.isObject()
             .withRequired('dataSource', validator.isString({ regex: emptycheck, message: "dataSource is required" }))
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtHue') {
+            check = validator.isObject()
+                .withRequired('hueValue', validator.isString({ regex: emptycheck, message: "hueValue is required" }))
+        }else if(path == "/updHue"){
+            check = validator.isObject()
+            .withRequired('hueValue', validator.isString({ regex: emptycheck, message: "hueValue is required" }))
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {

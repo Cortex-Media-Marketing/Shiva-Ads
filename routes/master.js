@@ -48,6 +48,12 @@ router.get('/lstDataSource', common.tokenMiddleVerify,masterController.lstDataSo
 router.patch('/updDataSource',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updDataSource);
 router.delete('/delDataSource/:id',common.tokenMiddleVerify, masterController.delDataSource);
 
+//Ads Hue -c
+router.post('/crtHue',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.crtHue);
+router.get('/lstHue',common.tokenMiddleVerify, masterController.lstHue);
+router.patch('/updHue',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updHue);
+router.delete('/delHue/:id', common.tokenMiddleVerify,masterController.delHue);
+
 
 
 module.exports = router;
