@@ -18,6 +18,11 @@ theaterRoute.get('/isThrOnScrRoGenerated/:id',common.tokenMiddleVerify , control
 
 theaterRoute.delete("/delThrOnScrRo/:id",common.tokenMiddleVerify,controller.delThrOnScrRo)
 
+theaterRoute.post("/crtThrOffScrnRo",common.tokenMiddleVerify,nodeValidator.postValidation,controller.crtThrOffScrnRo)
+
+theaterRoute.patch("/editThrOffScrRo/:id",common.tokenMiddleVerify,controller.editThrOffScrRo)
+
+
 
 
 

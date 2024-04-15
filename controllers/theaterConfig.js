@@ -111,6 +111,82 @@ exports.delThrOnScrRo = async (req, res) => {
     }
 }
 
+exports.crtThrOffScrnRo = async (req, res) => {
+    try {
+
+        const roNum = await helper.GenerateRoNumber();
+        const data = req.body;
+        data["roNumber"] = roNum
+
+        const creatRec = await offScrnTheater.create(data);
+        if (creatRec) {
+            const incRoNum = await helper.IncRoNumber();
+            if (incRoNum.acknowledged) {
+                res.json({ status: true, messag: "Record Created Successfully" })
+            } else {
+                res.json({ status: true, messag: "Record Created Successfully but failed to update Ro number" })
+            }
+        } else {
+            res.json({ status: false, message: "Unable to create record" })
+        }
+
+
+    } catch (e) {
+        console.log(e, "err")
+        res.json({ status: false, message: "oops something went wrong" })
+    }
+
+}
+
+exports.editThrOffScrRo = async (req, res) => {
+    try {
+        const data = req.body;
+        const id = req.params.id
+        const updateRec = await offScrnTheater.findByIdAndUpdate({ _id: id }, data);
+        if (updateRec) {
+            res.json({ status: true, messag: "Record updated Successfully" })
+        } else {
+            res.json({ status: false, message: "Unable to update record" })
+        }
+    } catch {
+        console.log(e, "err")
+        res.json({ status: false, message: "oops something went wrong" })
+    }
+}
+
+exports.listThrOffScrRo = async (req, res) => {
+    try {
+        const findRec = await offScrnTheater.find();
+        if (findRec) {
+            res.json({ status: true, messag: "Record fetched Successfully", data: findRec })
+        } else {
+            res.json({ status: false, message: "Unable to fetch record" })
+        }
+    } catch {
+        console.log(e, "err")
+        res.json({ status: false, message: "oops something went wrong" })
+    }
+}
+
+exports.fetchoffScrnTheaterROGenerated = (req, res) => {
+  try {
+      let data = req.params;
+
+      offScrnTheater.findById(data.id)
+      .select("roNumber isRoGenerated roUrl")
+          .then((exoffScrnTheater) => {
+
+              return res.json({ "status": true, "data": exoffScrnTheater });
+
+          }).catch((error) => {
+              return res.json({ "status": false, "message": error.message });
+          });
+  } catch (e) {
+      console.error(e)
+      return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+  }
+};
+
 
 
 
