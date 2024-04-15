@@ -51,3 +51,46 @@ exports.uptSubAgent = async (req, res) => {
         return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
     }
 };
+
+exports.subAgentInfo = async (req, res) => {
+    try {
+        let data = req.params;
+        subAgent.findById(data.id)
+            .then((resp) => {
+                return res.json({ "status": true, "data": resp });
+
+            }).catch((error) => {
+                return res.json({ "status": false, "message": error.message });
+            });
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};
+
+exports.subAgentList = async (req, res) => {
+    try {
+        const query = {};
+        const subAgentList = await subAgent.find(query)
+        return res.json({ status: true, "data": subAgentList });
+
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};
+
+exports.delSubAgentInfo = async (req, res) => {
+    try {
+        const { id} = req.params;
+        const subAgentResp = await subAgent.findByIdAndDelete(id)
+        if(subAgentResp){
+            return res.json({ status: true, message: "Deleted succesfully." });
+        }
+        return res.json({ status: false, message: "Unable to delete.!!!" });
+
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};

@@ -7,6 +7,11 @@ const { tokenMiddleVerify } = require('../common/encDec');
 agent.post('/crtSubAgent', agentController.crtSubAgent); 
 
 agent.patch('/uptSubAgent', agentController.uptSubAgent); 
-; 
+
+agent.get('/subAgentInfo/:id', agentController.subAgentInfo); 
+
+agent.post('/subAgentList', agentController.subAgentList); 
+
+agent.delete('/delSubAgentInfo/:id', agentController.delSubAgentInfo); 
 
 module.exports = agent;
