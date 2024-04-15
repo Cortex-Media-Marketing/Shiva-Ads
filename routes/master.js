@@ -36,5 +36,18 @@ router.get('/lstBusCategory', common.tokenMiddleVerify, masterController.lstBusC
 router.patch('/updBusCategory',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updBusCategory);
 router.delete('/delBusCategory/:id', common.tokenMiddleVerify,masterController.delBusCategory);
 
+//Advt Type -c
+router.post('/crtAdvtType',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.crtAdvtType);
+router.get('/lstAdvtType',common.tokenMiddleVerify, masterController.lstAdvtType);
+router.patch('/updAdvtType',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updAdvtType);
+router.delete('/delAdvtType/:id', common.tokenMiddleVerify,masterController.delAdvtType);
+
+//Data source -c 
+router.post('/crtDataSource', nodeValidator.postValidation,common.tokenMiddleVerify, masterController.crtDataSource);
+router.get('/lstDataSource', common.tokenMiddleVerify,masterController.lstDataSource);
+router.patch('/updDataSource',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updDataSource);
+router.delete('/delDataSource/:id',common.tokenMiddleVerify, masterController.delDataSource);
+
+
 
 module.exports = router;
