@@ -10,6 +10,10 @@ client.post('/add_instant_client',tokenMiddleVerify,Validation, addAClient);
 
 client.patch('/update_client_detail',tokenMiddleVerify ,Validation, updateClientDetail); 
 
+client.get('/client_info/:clientId',tokenMiddleVerify , fetchClientDetail); 
 
+client.post('/client_list',tokenMiddleVerify , fetchClientList); 
+
+client.delete('/delete_client/:clientId',tokenMiddleVerify , deleteClient); 
 
 module.exports = client;
