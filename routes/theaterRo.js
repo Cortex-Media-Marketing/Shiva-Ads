@@ -28,6 +28,9 @@ theaterRoute.get('/isThrOffScrRoGenerated/:id',common.tokenMiddleVerify , contro
 
 theaterRoute.delete("/delThrOffScrRo/:id",common.tokenMiddleVerify,controller.delThrOffScrRo)
 
+theaterRoute.post("/s3Upload",upload.single('file'),controller.s3Upload)
+
+
 
 
 

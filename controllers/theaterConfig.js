@@ -187,6 +187,141 @@ exports.fetchoffScrnTheaterROGenerated = (req, res) => {
   }
 };
 
+exports.delThrOffScrRo = async (req, res) => {
+    try {
+        const id = req.params.id
+        const delRec = await offScrnTheater.findByIdAndDelete({ "_id": id });
+        if (delRec) {
+            res.json({ status: true, messag: "Record deleted Successfully" })
+        } else {
+            res.json({ status: false, message: "Unable to fetch record" })
+        }
+    } catch {
+        console.log(e, "err")
+        res.json({ status: false, message: "oops something went wrong" })
+    }
+}
+
+
+exports.s3Upload = async (req, res) => {
+    try {
+        //    console.log(s3Data,"s3Data")
+        //    awsHelper.fileUpload(req.file,(resp)=>{
+        //     res.json({resp})
+        //    })
+
+        const AWS = require('aws-sdk');
+        const nodemailer = require('nodemailer');
+
+        // AWS S3 configuration
+        const s3 = new AWS.S3({
+            accessKeyId: 'AKIA3FLDZZEEA2CMDFNF',
+            secretAccessKey: 'AKIA3FLDZZEEA2CMDFNF',
+            region: 'us-east-1'
+        });
+
+        // Nodemailer transporter setup
+        // const transporter = nodemailer.createTransport({
+        //     service: 'gmail', // e.g., 'Gmail'
+        //     auth: {
+        //         user: 'gokulavarathan5@gmail.com',
+        //         pass: 'aruppukottai'
+        //     }
+        // });
+
+        // Function to upload file to S3
+        async function uploadFileToS3(bucketName, key, file) {
+            const params = {
+                Bucket: bucketName,
+                Key: key,
+                Body: file
+            };
+            try {              
+              await s3.upload(params).promise();
+                console.log(`File uploaded to S3 bucket: ${bucketName}/${key}`);
+                return key;
+            } catch (error) {
+                console.error('Error uploading file to S3:', error);
+                return null;
+            }
+        }
+
+        // Function to send email with attachment
+        // async function sendEmailWithAttachment(emailOptions, attachmentKey) {
+        //     try {
+        //         // Construct the S3 URL for the attachment
+        //         const attachmentUrl = `https://s3-${s3.config.region}.amazonaws.com/${s3.config.bucket}/${attachmentKey}`;
+
+        //         // Attach the file
+        //         emailOptions.attachments = [{ filename: attachmentKey, path: attachmentUrl }];
+
+        //         // Send email
+        //         await transporter.sendMail(emailOptions);
+        //         console.log('Email sent successfully!');
+        //     } catch (error) {
+        //         console.error('Error sending email:', error);
+        //     }
+        // }
+
+        // Usage example
+        const bucketName = 'generalasset';
+        const objectKey = 'attachment.txt'; // Key for the file in S3
+        const fileContents = 'Hello, this is a test file!'; // Contents of the file to upload
+        const emailOptions = {
+            from: 'gokulavarathan5@gmail.com ',
+            to: 'gokul@cortexmarketing.in',
+            subject: 'S3 Object Attachment',
+            text: 'Attached is the file from S3.'
+        };
+
+        // Upload file to S3 and send email with attachment
+        uploadFileToS3(bucketName, objectKey, fileContents)
+            .then((attachmentKey) => {
+                res.json({attachmentKey})
+                //sendEmailWithAttachment(emailOptions, attachmentKey);
+            });
+
+
+    } catch (e) {
+        console.log(e, "err")
+        res.json({ status: false, message: "oops something went wrong" })
+    }
+}
+
+
+exports.s3UploadBase64 = async (req, res) => {
+try{
+    const {base64Data,fileName,fileType} = req.body;
+    const currentEpoch = Math.floor(Date.now() / 1000);
+    async function uploadToS3(base64Data) {
+  try {
+    const bufferData = Buffer.from(base64Data, 'base64');
+    const params = {
+      Bucket: 'generalasset',
+      Key: `${currentEpoch}#${fileName}.txt`, // Provide a key/name for the S3 object
+      Body: bufferData,
+      ContentType: 'application/octet-stream'
+    };
+    await s3.upload(params).promise();
+    console.log('Uploaded base64 data to S3');
+  } catch (error) {
+    console.error('Error uploading to S3:', error);
+    throw error; // Propagate the error to the caller
+  }
+}
+
+  try {
+    await uploadToS3(base64Data);
+    res.json({ message: 'File uploaded to S3' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error uploading file to S3' });
+  }
+
+}catch(e){
+  res.status(500).json({ error: 'Error uploading file to S3' });
+
+}
+}
 
 
 
