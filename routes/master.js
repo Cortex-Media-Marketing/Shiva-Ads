@@ -130,5 +130,11 @@ router.get('/lstBrand',common.tokenMiddleVerify, masterController.lstBrand);
 router.patch('/updBrand',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updBrand);
 router.delete('/delBrand/:id', common.tokenMiddleVerify,masterController.delBrand);
 
+//s2Events  - look waiting for clientId
+router.post('/crts2Events',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.crts2Events);
+router.get('/lsts2Events',common.tokenMiddleVerify, masterController.lsts2Events);
+router.patch('/upds2Events',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.upds2Events);
+router.delete('/dels2Events/:id',common.tokenMiddleVerify, masterController.dels2Events);
+
 
 module.exports = router;

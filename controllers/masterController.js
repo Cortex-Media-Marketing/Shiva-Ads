@@ -1331,3 +1331,138 @@ exports.delDisBand = (req, res) => {
         res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
     }
 }
+
+exports.crtBrand = async(req, res) => {
+    try {
+        const obj = {brndName:req.body.brandName,clientId:req.body.clientUniId}
+        const isExist = await queryHelper.isExist("s2BrandSchema",obj)
+        if(!isExist){
+        queryHelper.create("s2BrandSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Brand Name already exist"})
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstBrand = (req, res) => {
+    try {
+
+        queryHelper.findData('s2BrandSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        brandName:item.brndName,
+                        clientUniId:item.clientId,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updBrand = (req, res) => {
+    try {
+        const data = req.body 
+        queryHelper.findByIdAndUpdate("s2BrandSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delBrand = (req, res) => {
+    try {
+        queryHelper.deleteData("s2BrandSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.crts2Events = async(req, res) => {
+    try {
+        const obj = {evntName:req.body.eventName,clientId:req.body.clientUniId}
+        const isExist = await queryHelper.isExist("s2EventSchema",obj)
+        if(!isExist){
+        queryHelper.create("s2EventSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"s2 Event Name already exist"})
+        }
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lsts2Events = (req, res) => {
+    try {
+        queryHelper.findData('s2EventSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        eventName:item.evntName,
+                        clientUniId:item.clientId,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.upds2Events = (req, res) => {
+    try {
+        const data = req.body 
+        queryHelper.findByIdAndUpdate("s2EventSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.dels2Events = (req, res) => {
+    try {
+        queryHelper.deleteData("s2EventSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}

@@ -192,6 +192,15 @@ exports.postValidation = (req, res, next) => {
             .withOptional('brndName', validator.isString())
             .withOptional('clientId', validator.isString())
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crts2Events') {
+            check = validator.isObject()
+                .withRequired('eventName', validator.isString({ regex: emptycheck, message: "eventName is required" }))
+                .withRequired('clientUniId', validator.isString({ regex: emptycheck, message: "clientUniId is required" }))
+        }else if(path == "/upds2Events"){
+            check = validator.isObject()
+            .withOptional('evntName', validator.isString())
+            .withOptional('clientId', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {
