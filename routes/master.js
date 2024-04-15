@@ -54,6 +54,19 @@ router.get('/lstHue',common.tokenMiddleVerify, masterController.lstHue);
 router.patch('/updHue',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updHue);
 router.delete('/delHue/:id', common.tokenMiddleVerify,masterController.delHue);
 
+//Page
+router.post('/crtPage', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crtPage);
+router.get('/lstPage',common.tokenMiddleVerify, masterController.lstPage);
+router.patch('/updPage', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updPage);
+router.delete('/delPage/:id',common.tokenMiddleVerify, masterController.delPage);
+
+
+//Department
+router.post('/crtDepartment', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crtDepartment);
+router.get('/lstDepartment',common.tokenMiddleVerify, masterController.lstDepartment);
+router.patch('/updDepartment',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updDepartment);
+router.delete('/delDepartment/:id', masterController.delDepartment);
+
 
 
 module.exports = router;

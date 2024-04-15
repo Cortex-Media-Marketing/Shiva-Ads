@@ -66,6 +66,22 @@ exports.postValidation = (req, res, next) => {
             check = validator.isObject()
             .withRequired('hueValue', validator.isString({ regex: emptycheck, message: "hueValue is required" }))
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtPage') {
+            check = validator.isObject()
+            .withRequired('adsIssueId', validator.isString({ regex: emptycheck, message: "adsIssueId is required" }))
+            .withRequired('pageNo', validator.isString({ regex: emptycheck, message: "pageNo is required" }))
+        }else if(path == "/updPage"){
+            check = validator.isObject()
+            .withOptional('issueId', validator.isString())
+            .withOptional('pageData', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtDepartment') {
+            check = validator.isObject()
+            .withRequired('depName', validator.isString({ regex: emptycheck, message: "depName is required" }))
+        }else if(path == "/updDepartment"){
+            check = validator.isObject()
+            .withOptional('depName', validator.isString({ regex: emptycheck, message: "depName is required" }))
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {
