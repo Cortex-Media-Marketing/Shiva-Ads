@@ -1209,6 +1209,7 @@ exports.crtFMProgram = async(req, res) => {
     }
 }
 
+
 exports.lstFMProgram = (req, res) => {
     try {
         queryHelper.findData('fmProgramSchema', {}, {}, 0, (resp) => {
@@ -1249,6 +1250,80 @@ exports.updFMProgram = (req, res) => {
 exports.delFMProgram = (req, res) => {
     try {
         queryHelper.deleteData("fmProgramSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.crtDisBand = async(req, res) => {
+    try {
+        const obj = {distriName:req.body.distributionName}
+        const data ={
+            distriName:req.body.distributionName,
+            clientId:req.body.clientUniId,
+            programId:req.body.programUniId,
+
+        }
+        const isExist = await queryHelper.isExist("distriBandSchema",obj)
+        if(!isExist){
+        queryHelper.create("distriBandSchema",data,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Distribution Name already exist"})
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstDisBand = (req, res) => {
+    try {
+        queryHelper.findData('distriBandSchema', {}, {}, 0, (resp) => {
+            if(resp.status){
+                const updatedValue = resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        distributionName:item.distriName,
+                        clientUniId:item.clientId,
+                        programUniId:item.programId,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updDisBand = (req, res) => {
+    try {
+        const data = req.body
+        queryHelper.findByIdAndUpdate("distriBandSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delDisBand = (req, res) => {
+    try {
+        queryHelper.deleteData("distriBandSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
             res.json(data)
         })
     } catch (e) {
