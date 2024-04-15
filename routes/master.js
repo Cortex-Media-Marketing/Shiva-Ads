@@ -74,5 +74,11 @@ router.get('/lstDesignation', common.tokenMiddleVerify,masterController.lstDesig
 router.patch('/updDesignation',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updDesignation);
 router.delete('/delDesignation/:id', masterController.delDesignation);
 
+//malarType
+router.post('/crtSubIssueType', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crtSubIssueType);
+router.get('/lstSubIssueType',common.tokenMiddleVerify, masterController.lstSubIssueType);
+router.patch('/updSubIssueType',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updSubIssueType);
+router.delete('/delSubIssueType/:id',common.tokenMiddleVerify, masterController.delSubIssueType);
+
 
 module.exports = router;

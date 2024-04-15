@@ -814,3 +814,106 @@ exports.delDesignation = (req, res) => {
         res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
     }
 }
+
+
+exports.crtSubIssueType = async(req, res) => {
+    try {
+        const obj = {issueSubCat:req.body.issueCatName,issueId:req.body.isuId}
+        const isExist = await queryHelper.isExist("issueSubCatSchema",{issueSubCat:req.body.issueCatName})
+        if(!isExist){
+        queryHelper.create("issueSubCatSchema",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"issue SubCategory  already exist"})
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+exports.lstSubIssueType = (req, res) => {
+    try {
+
+        issueSubCat.aggregate([
+            {$lookup:{ 
+             from: config.dbPrefix + 'AMEHCSEUSSI',
+             let: { issueId: { $toObjectId: "$issueId" } },
+             pipeline: [ { $match: { $expr: { $eq: ["$_id", "$$issueId"] }}}],
+             as: "issueDetail"
+            }},
+            {
+                $project:{
+                    _id:1,
+                    issueType: { $arrayElemAt: ["$issueDetail.issueTypeName", 0] } ,
+                    issueCatName:'$issueSubCat',
+                    isuId:'$issueId',
+                    createdAt:'$createdAt'
+                }
+            }
+
+        ]).then((resp)=>{
+            if(resp.length>0){
+                res.json({status:true,message:"Available List",data:resp})
+            }else{
+                 res.json({status:false,message:"No Data Available"})
+            }
+        }).catch((err) => {
+            console.error("Error during aggregation:", err);
+            res.json({status:false,message:"Error while fetching"})
+        });
+
+
+        // queryHelper.findData('issueSubCatSchema', {}, {}, 0, (resp) => {
+        //     if(resp.status){
+        //         const updatedValue = resp.data.map((item,i)=>{
+        //             return{
+        //                 id:item._id,
+        //                 issueCatName:item.issueSubCat,
+        //                 isuId:item.issueId,
+        //                 createdAt:item.createdAt
+        //             }
+        //         })
+        //         res.json({status:true,message:"Available List",data:updatedValue})
+        //     }else{
+        //         res.json(resp)
+        //     }
+           
+        // })
+
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updSubIssueType = (req, res) => {
+    try {
+        const data = req.body
+        queryHelper.findByIdAndUpdate("issueSubCatSchema",{_id:new mongoose.Types.ObjectId(req.body.id)},data,(resp)=>{
+            res.json(resp)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delSubIssueType = (req, res) => {
+    try {
+        queryHelper.deleteData("issueSubCatSchema","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+
+

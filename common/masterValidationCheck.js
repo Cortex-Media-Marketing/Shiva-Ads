@@ -91,6 +91,15 @@ exports.postValidation = (req, res, next) => {
             .withOptional('depId', validator.isString())
             .withOptional('desName', validator.isString())
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
+        }else if (path == '/crtSubIssueType') {
+            check = validator.isObject()
+            .withRequired('issueCatName', validator.isString({ regex: emptycheck, message: "issueCatName is required" }))
+            .withRequired('isuId', validator.isString({ regex: emptycheck, message: "isuId is required" }))
+        }else if(path == "/updSubIssueType"){
+            check = validator.isObject()
+            .withOptional('issueId', validator.isString())
+            .withOptional('issueSubCat', validator.isString())
+            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {
