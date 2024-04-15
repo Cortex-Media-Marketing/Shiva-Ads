@@ -61,6 +61,56 @@ exports.editThrOnScrRo = async (req, res) => {
     }
 }
 
+exports.listThrOnScrRo = async (req, res) => {
+    try {
+        const findRec = await onScrnTheater.find();
+        if (findRec) {
+            res.json({ status: true, messag: "Record fetched Successfully", data: findRec })
+        } else {
+            res.json({ status: false, message: "Unable to fetch record" })
+        }
+    } catch {
+        console.log(e, "err")
+        res.json({ status: false, message: "oops something went wrong" })
+    }
+}
+
+exports.fetchonScrnTheaterROGenerated = (req, res) => {
+  try {
+      let data = req.params;
+
+      onScrnTheater.findById(data.id)
+      .select("roNumber isRoGenerated roUrl")
+          .then((exonScrnTheater) => {
+
+              return res.json({ "status": true, "data": exonScrnTheater });
+
+          }).catch((error) => {
+              return res.json({ "status": false, "message": error.message });
+          });
+  } catch (e) {
+      console.error(e)
+      return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+  }
+};
+
+
+
+exports.delThrOnScrRo = async (req, res) => {
+    try {
+        const id = req.params.id
+        const delRec = await onScrnTheater.findByIdAndDelete({ "_id": id });
+        if (delRec) {
+            res.json({ status: true, messag: "Record deleted Successfully" })
+        } else {
+            res.json({ status: false, message: "Unable to fetch record" })
+        }
+    } catch {
+        console.log(e, "err")
+        res.json({ status: false, message: "oops something went wrong" })
+    }
+}
+
 
 
 
@@ -273,3 +323,147 @@ exports.editThrOnScrRo = async (req, res) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+//working code for single attachment
+
+// exports.pdfFormat  = async(req,res) =>{
+
+
+//   async function sendEmailWithAttachment(to, subject, attachmentFileName, attachmentContent) {
+//     const rawEmail = await createRawEmail(to, subject, attachmentFileName, attachmentContent);
+//     const params = {
+//       Source: "pankaj@cortexmarketing.in",
+//       Destinations: ["gokul@cortexmarketing.in"],
+//       RawMessage: {
+//         Data: rawEmail
+//       }
+//     };
+  
+//     return ses.sendRawEmail(params).promise();
+//   }
+  
+//   async function createRawEmail(to, subject, attachmentFileName, attachmentContent) {
+//   const rawEmail = `From: pankaj@cortexmarketing.in\n` +
+//   `To: gokul@cortexmarketing.in\n` +
+//   `Subject: ${"subject"}\n` +
+//   `MIME-Version: 1.0\n` +
+//   `Content-Type: multipart/mixed; boundary="NextPart"\n\n` +
+//   `--NextPart\n` +
+//   `Content-Type: text/plain\n\n` +
+//   `Hello,\n\n` +
+//   `Please find the attached files.\n\n` +
+//   `--NextPart\n` +
+//   `Content-Type: application/octet-stream; name="${attachmentFileName}"\n` +
+//   `Content-Disposition: attachment; filename="${attachmentFileName}"\n` +
+//   `Content-Transfer-Encoding: base64\n\n` +
+//   `${attachmentContent}\n\n`+
+//   `--NextPart--`
+  
+
+//   return rawEmail;
+  
+//   }
+  
+//     try {
+
+//       const response = await axios.get('https://generalasset.s3.amazonaws.com/Invoice_1616529341.pdf', {
+//         responseType: 'arraybuffer'
+//       });
+  
+//       const attachmentContent = Buffer.from(response.data, 'binary').toString('base64');
+  
+//       const emailResponse = await sendEmailWithAttachment('gokul@cortexmarketing.in', 'Invoice Attached', 'invoice.pdf', attachmentContent);
+  
+//       console.log('Email sent successfully:', emailResponse);
+//     } catch (err) {
+//       console.error('Error sending email:', err);
+//     }
+
+// }
+
+  // async function sendEmailWithAttachment(email, subject, attachmentFileName, attachmentContent) {
+  //   const params = {
+  //     RawMessage: {
+  //       Data: await createRawEmail(email, subject, attachmentFileName, attachmentContent)
+  //     }
+  //   };
+  // console.log(createRawEmail(email, subject, attachmentFileName, attachmentContent),"raw")
+  //   return ses.sendRawEmail(params).promise();
+  // }
+  // async function createRawEmail(email, subject, attachmentFileName, attachmentContent) {
+  //   const boundary = `BOUNDARY_${Date.now()}`;
+  //   const rawEmail = `From: pankaj@cortexmarketing.in
+  // To: ${email}
+  // Subject: ${subject}
+  // MIME-Version: 1.0
+  // Content-type: multipart/mixed; boundary="${boundary}"
+  
+  // --${boundary}
+  // Content-Type: text/plain; charset=UTF-8
+  
+  // Please find the attached invoice.
+  
+  // --${boundary}
+  // Content-Type: application/pdf
+  // Content-Disposition: attachment; filename="${attachmentFileName}"
+  
+  // ${attachmentContent}
+  
+  // --${boundary}--`;
+  
+  //   return rawEmail;
+  // }
+  // (async () => {
+  //   try {
+  //     // Download the PDF content from the S3 URL
+  //     const response = await axios.get('https://generalasset.s3.amazonaws.com/Invoice_1616529341.pdf', {
+  //       responseType: 'arraybuffer'
+  //     });
+  
+  //     // Convert the binary content to base64 encoding
+  //     const attachmentContent = Buffer.from(response.data, 'binary').toString('base64');
+  
+  //     const emailResponse = await sendEmailWithAttachment('gokul@cortexmarketing.in', 'Invoice Attached', 'invoice.pdf', attachmentContent);
+  
+  //     console.log('Email sent successfully:', emailResponse);
+  //   } catch (err) {
+  //     console.error('Error sending email:', err);
+  //   }
+  // })();
+
+
+ // const rawEmailMessage = {
+        //   Source: fromMail,
+        //   Destinations: [toMail],
+        //   RawMessage: {
+        //     Data: `From: ${fromMail}\n` +
+        //           `To: ${toMail}\n` +
+        //           `Subject: ${subject}\n` +
+        //           `MIME-Version: 1.0\n` +
+        //           `Content-Type: multipart/mixed; boundary="NextPart"\n\n` +
+        //           `--NextPart\n` +
+        //           `Content-Type: text/plain\n\n` +
+        //           `Hello,\n\n` +
+        //           `Please find the attached files.\n\n` +
+        //           `--NextPart\n` +
+        //           `Content-Type: application/octet-stream; name="${fileName}"\n` +
+        //           `Content-Disposition: attachment; filename="${fileName}"\n` +
+        //           `Content-Transfer-Encoding: base64\n\n` +
+        //           `${attachmentBase641}\n\n` +
+        //           `--NextPart\n` +
+        //           `Content-Type: application/octet-stream; name="${fileName}"\n` +
+        //           `Content-Disposition: attachment; filename="${fileName}"\n` +
+        //           `Content-Transfer-Encoding: base64\n\n` +
+        //           `${attachmentBase641}\n\n` +
+        //           `--NextPart--`
+        //   }
+        // };

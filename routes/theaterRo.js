@@ -12,6 +12,12 @@ theaterRoute.post("/crtThrOnScrnRo",common.tokenMiddleVerify,nodeValidator.postV
 
 theaterRoute.patch("/editThrOnScrRo/:id",common.tokenMiddleVerify,controller.editThrOnScrRo)
 
+theaterRoute.get("/listThrOnScrRo",common.tokenMiddleVerify,controller.listThrOnScrRo)
+
+theaterRoute.get('/isThrOnScrRoGenerated/:id',common.tokenMiddleVerify , controller.fetchonScrnTheaterROGenerated); 
+
+theaterRoute.delete("/delThrOnScrRo/:id",common.tokenMiddleVerify,controller.delThrOnScrRo)
+
 
 
 
