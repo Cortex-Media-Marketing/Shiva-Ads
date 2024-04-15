@@ -133,3 +133,66 @@ exports.delIssueType = (req, res) => {
         res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
     }
 }
+
+exports.crtSchema = async(req, res) => {
+    try {
+        const obj = {schemaName:req.body.schmName}
+        const isExist = await queryHelper.isExist("schemaModel",obj)
+        if(!isExist){
+        queryHelper.create("schemaModel",obj,(resp)=>{
+            res.json(resp)
+        })
+        }else{
+            res.json({status:false,message:"Schema already exist"})
+        }
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.lstSchema = (req, res) => {
+    try {
+        queryHelper.findData('schemaModel', {}, {}, 0, async(resp) => {
+            if(resp.status){
+                const updatedValue = await resp.data.map((item,i)=>{
+                    return{
+                        id:item._id,
+                        schmName:item.schemaName,
+                        createdAt:item.createdAt
+                    }
+                })
+                res.json({status:true,message:"Available List",data:updatedValue})
+            }else{
+                res.json(resp)
+            }
+           
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.updSchema = (req, res) => {
+    try {
+        queryHelper.updateData("schemaModel","one",{_id:new mongoose.Types.ObjectId(req.body.id)},{"schemaName":req.body.schmName},(data) => {
+            res.json(data)
+        })
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}
+
+exports.delSchema = (req, res) => {
+    try {
+        queryHelper.deleteData("schemaModel","one",{_id:new mongoose.Types.ObjectId(req.params.id)},(data) => {
+            res.json(data)
+        })
+
+    } catch (e) {
+        console.log("Error catched in login", e);
+        res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" })
+    }
+}

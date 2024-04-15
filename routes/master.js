@@ -17,5 +17,11 @@ router.patch('/updIssueType',nodeValidator.postValidation,common.tokenMiddleVeri
 router.delete('/delIssueType/:id', common.tokenMiddleVerify,masterController.delIssueType);
 
 
+//schema -c
+router.post('/crtSchema', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crtSchema);
+router.get('/lstSchema', common.tokenMiddleVerify,masterController.lstSchema);
+router.patch('/updSchema', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updSchema);
+router.delete('/delSchema/:id',common.tokenMiddleVerify, masterController.delSchema);
+
 
 module.exports = router;
