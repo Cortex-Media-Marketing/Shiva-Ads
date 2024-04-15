@@ -42,6 +42,7 @@ theaterRoute.post("/getJson",controller.getJson)
 theaterRoute.post("/sendMailLambda",controller.sendMailLambda)
 
 
+
 //USE THIS API TO SEND MAIL WITH SINGLE/MULTI ATTACHMENT -- ATTACHMENT FILE WILL COME FROM S3
 
 theaterRoute.post("/sendMailWithAtt",controller.sendMailWithAtt)
