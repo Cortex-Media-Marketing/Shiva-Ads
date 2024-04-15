@@ -116,20 +116,6 @@ exports.postValidation = (req, res, next) => {
             .withOptional('reporterName', validator.isString())
             .withOptional('addProviderId', validator.isString())
             .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
-        }else if (path == '/crtSubHeading') {
-            check = validator.isObject()
-                .withRequired('subHeadName', validator.isString({ regex: emptycheck, message: "subHeadName is required" }))
-        }else if(path == "/updSubHeading"){
-            check = validator.isObject()
-            .withOptional('subHeadName', validator.isString({ regex: emptycheck, message: "subHeadName is required" }))
-            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
-        }else if (path == '/crtEditionTyp') {
-            check = validator.isObject()
-                .withRequired('typeOfEdition', validator.isString({ regex: emptycheck, message: "typeOfEdition is required" }))
-        }else if(path == "/updEditionTyp"){
-            check = validator.isObject()
-            .withOptional('typeOfEdition', validator.isString({ regex: emptycheck, message: "typeOfEdition is required" }))
-            .withRequired('id', validator.isString({ regex: emptycheck, message: "id is required" }))
         }
         
         validator.run(check, data, (errorcount, errors) => {

@@ -86,18 +86,6 @@ router.get('/lstAdvtPosition',common.tokenMiddleVerify, masterController.lstAdvt
 router.patch('/updAdvtPosition', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.updAdvtPosition);
 router.delete('/delAdvtPosition/:id', common.tokenMiddleVerify,masterController.delAdvtPosition);
 
-//Press Reporter - need add provider data for news paper
-router.post('/crtPressReport',nodeValidator.postValidation,common.tokenMiddleVerify,  masterController.crtPressReport);
-router.get('/lstPressReport', common.tokenMiddleVerify,masterController.lstPressReport);
-router.patch('/updPressReport', nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updPressReport);
-router.delete('/delPressReport/:id',common.tokenMiddleVerify, masterController.delPressReport);
-
-//Edition Type
-
-router.post('/crtEditionTyp', nodeValidator.postValidation,common.tokenMiddleVerify,masterController.crtEditionTyp);
-router.get('/lstEditionTyp', common.tokenMiddleVerify,masterController.lstEditionTyp);
-router.patch('/updEditionTyp',nodeValidator.postValidation,common.tokenMiddleVerify, masterController.updEditionTyp);
-router.delete('/delEditionTyp/:id',common.tokenMiddleVerify, masterController.delEditionTyp);
 
 
 module.exports = router;
