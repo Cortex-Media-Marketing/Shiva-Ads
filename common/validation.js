@@ -812,6 +812,109 @@ exports.Validation = (req, res, next) => {
 
       });
     }
+    else if (path == '/addRadioNTR') {
+
+      schema = Joi.object({
+        roDate: Joi.string().required(),
+        companyName: Joi.string().required(),
+        station: Joi.string().required(),
+        agencyNameForBilling: Joi.string().required(),
+        advertiserNameForBilling: Joi.string().required(),
+        brandName: Joi.string().required(),
+        campaignStartDate: Joi.date().required(),
+        campaignEndDate: Joi.date().required(),
+        campaignDays: Joi.number().required(),
+        ratePer10Secs: Joi.number().required(),
+        timeBand: Joi.string(),
+        adDuration: Joi.number(),
+        ntr: Joi.string().optional(),
+        totalSpots: Joi.number(),
+        totalSeconds: Joi.number(),
+        nettAmount: Joi.number(),
+        gst: Joi.number(),
+        totalPayableAfterTaxes: Joi.number(),
+
+        coSponsor: Joi.boolean().default(false),
+        csProgramDate: Joi.string().optional().allow(''),
+        csSelectedPrograms: Joi.array().items(Joi.string()).empty().optional(),
+        namingRights: Joi.boolean().default(false),
+        nrProgramDate: Joi.string().optional().allow(''),
+        nrSelectedPrograms: Joi.array().items(Joi.string()).empty().optional(),
+        dayBranding: Joi.boolean().default(false).optional(),
+        dbProgramDate: Joi.string().optional(),
+        assocDayBranding: Joi.boolean().default(false).optional(),
+        adbProgramDate: Joi.string().optional(),
+
+        tagline: Joi.string(),
+        note: Joi.string(),
+        paymentTermsWithchequeDetails: Joi.string(),
+        attachmentFile: Joi.string(),
+        clientBillingRate: Joi.number(),
+        remindStatus: Joi.boolean().optional(),
+        isRoGenerated: Joi.boolean().optional(),
+        roUrl: Joi.string().optional().allow(''),
+        isClientRoGenerated: Joi.boolean().optional(),
+        isVendorRoGenerated: Joi.boolean().optional(),
+        clientRoUrl: Joi.string().optional().allow(''),
+        vendorRoUrl: Joi.string().optional().allow(''),
+        vendorId: Joi.string().optional().allow(''),
+        gst4Client: Joi.number(),
+        nett4Client: Joi.number()
+
+      });
+    }
+    else if (path == '/updateRadioNTR') {
+
+      schema = Joi.object({
+        _id: Joi.string().required(),
+        roDate: Joi.string().optional(),
+        companyName: Joi.string().optional(),
+        station: Joi.string().optional(),
+        agencyNameForBilling: Joi.string().optional(),
+        advertiserNameForBilling: Joi.string().optional(),
+        brandName: Joi.string().optional(),
+        campaignStartDate: Joi.date().optional(),
+        campaignEndDate: Joi.date().optional(),
+        campaignDays: Joi.number().optional(),
+        ratePer10Secs: Joi.number().optional(),
+        timeBand: Joi.string().optional(),
+        adDuration: Joi.number().optional(),
+        ntr: Joi.string().optional(),
+        totalSpots: Joi.number().optional(),
+        totalSeconds: Joi.number().optional(),
+        nettAmount: Joi.number().optional(),
+        gst: Joi.number().optional(),
+        totalPayableAfterTaxes: Joi.number().optional(),
+
+
+        coSponsor: Joi.boolean().default(false),
+        csProgramDate: Joi.string().optional().allow(''),
+        csSelectedPrograms: Joi.array().items(Joi.string()).empty().optional(),
+        namingRights: Joi.boolean().default(false),
+        nrProgramDate: Joi.string().optional().allow(''),
+        nrSelectedPrograms: Joi.array().items(Joi.string()).empty().optional(),
+        dayBranding: Joi.boolean().default(false).optional(),
+        dbProgramDate: Joi.string().optional(),
+        assocDayBranding: Joi.boolean().default(false).optional(),
+        adbProgramDate: Joi.string().optional(),
+
+        tagline: Joi.string().optional(),
+        note: Joi.string().optional(),
+        paymentTermsWithchequeDetails: Joi.string().optional(),
+        attachmentFile: Joi.string().optional(),
+        clientBillingRate: Joi.number().optional(),
+        gst4Client: Joi.number().optional(),
+        isRoGenerated: Joi.boolean().optional(),
+        roUrl: Joi.string().optional().allow(''),
+        isClientRoGenerated: Joi.boolean().optional(),
+        isVendorRoGenerated: Joi.boolean().optional(),
+        clientRoUrl: Joi.string().optional().allow(''),
+        vendorRoUrl: Joi.string().optional().allow(''),
+        vendorId: Joi.string().optional().allow(''),
+        nett4Client: Joi.number().optional()
+
+      });
+    }
    
     else if (path == '/addOohHoarding') {
 

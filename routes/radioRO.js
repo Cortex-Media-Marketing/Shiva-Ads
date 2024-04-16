@@ -18,5 +18,15 @@ radioRO.get('/radioFCTInfo/:id',tokenMiddleVerify , fetchRadioFCTDetail);
 
 radioRO.get('/isRadioFCTGenerated/:id',tokenMiddleVerify , fetchRadioFCTGenerated); 
 
+radioRO.post('/radioFCTList',tokenMiddleVerify , RadioFCTList); 
+
+radioRO.delete('/deleteRadioFCT/:id',tokenMiddleVerify , deleteRadioFCT); 
+
+///////////////////////////////////////////////////////////   Radio NTR ////////////////////////////////////////////////////
+
+radioRO.post('/addRadioNTR',tokenMiddleVerify,s3upload.fields([{ name: 'attachmentFile', maxCount: 1 }]),Validation, addRadioNTR); 
+
+radioRO.patch('/updateRadioNTR',tokenMiddleVerify ,s3upload.fields([{ name: 'attachmentFile', maxCount: 1 }]),Validation, updateRadioNTRDetail); 
+
 
 module.exports = radioRO;
