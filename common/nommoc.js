@@ -39,6 +39,8 @@ module.exports = {
 
 		return template;
 	},
+
+	
 	GenerateRoNumber: async() => {
 		const RoNumberModel = require('../models/roNumber');
 	      let getExRoNumber = await RoNumberModel.find({},{},{roNumber :-1})
