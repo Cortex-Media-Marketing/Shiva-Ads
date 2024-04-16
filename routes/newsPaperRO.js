@@ -13,5 +13,15 @@ NewsPaperRO.get('/newsPaperROInfo/:id',tokenMiddleVerify , fetchNewsPaperRODetai
 
 NewsPaperRO.get('/isRoGenerated/:id',tokenMiddleVerify , fetchNewsPaperROGenerated); 
 
+NewsPaperRO.post('/newsPaperROList',tokenMiddleVerify , newsPaperROList); 
+
+NewsPaperRO.post('/newsPaperROShiftCancelList',tokenMiddleVerify , newsPaperROShiftCancelList); 
+
+NewsPaperRO.post('/shiftedNewspaperROList',tokenMiddleVerify , shiftedNewsPaperROList); 
+
+NewsPaperRO.post('/cancelledNewspaperROList',tokenMiddleVerify , cancelledNewsPaperROList); 
+
+NewsPaperRO.delete('/deleteNewsPaperRO/:id',tokenMiddleVerify , deleteNewsPaperRO); 
+
 
 module.exports = NewsPaperRO;

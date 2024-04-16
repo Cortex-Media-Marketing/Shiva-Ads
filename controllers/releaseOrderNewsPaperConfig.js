@@ -192,3 +192,177 @@ exports.fetchNewsPaperRODetail = (req, res) => {
         return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
     }
 };
+
+exports.fetchNewsPaperROGenerated = (req, res) => {
+    try {
+        let data = req.params;
+
+        NewsPaperRO.findById(data.id)
+        .select("roNumber isRoGenerated roUrl")
+            .then((exNewsPaperRO) => {
+
+                return res.json({ "status": true, "data": exNewsPaperRO });
+
+            }).catch((error) => {
+                return res.json({ "status": false, "message": error.message });
+            });
+    } catch (e) {
+        console.error(e)
+        return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+    }
+};
+
+exports.newsPaperROList = async (req, res) => {
+    try {
+        const { roNumberFrom, roNumberTo, roDateFrom, roDateTo, adsProvider, client, subAgent, releaseDate, issueType, issueSubCategory, category } = req.body;
+
+        const query = { isReleased: true, isCancelled: false };
+
+        if (roNumberFrom && roNumberTo) {
+            query.roNumber = {
+                $gte: roNumberFrom,
+                $lte: roNumberTo
+            };
+        }
+
+        if (roDateFrom && roDateTo) {
+            const toDate = new Date(roDateTo);
+            toDate.setDate(toDate.getDate() + 1);
+            query.createdAt = {
+                $gte: new Date(roDateFrom),
+                $lte: toDate
+            };
+        }
+        // if (adsProvider) {
+        //     query.NewsPaperROType = { $regex: new RegExp(adsProvider, 'i') };
+        // }
+
+        if (client) {
+
+            // console.log(fetchClient)
+            query.typeClientNameHere = new RegExp(client, 'i')
+            // let fetchClient = await Client.findOne({ "clientName": new RegExp(client, 'i') }).select("_id")
+            // // console.log(fetchClient)
+            // query.typeClientNameHere = fetchClient ? fetchClient._id : null;
+
+        }
+        if (subAgent) {
+
+            query.subAgent = new RegExp(subAgent, 'i')
+            // let fetchSubAgent = await SubAgent.findOne({ "name": new RegExp(subAgent, 'i') }).select("_id")
+            // // console.log(fetchSubAgent)
+            // query.subAgent = fetchSubAgent ? fetchSubAgent._id : null;
+        }
+
+
+        if (releaseDate) {
+            const toDate = new Date(releaseDate);
+            toDate.setDate(toDate.getDate() + 1);
+
+            query.releaseDate = {
+                $gte: new Date(releaseDate),
+                $lte: toDate
+            };
+        }
+
+        if (issueType) {
+
+            query.advtIssueOrMalarOrOthers = new RegExp(issueType, 'i')
+            // let fetchIssueType = await IssuesOrMalarModel.findOne({ "issueTypeName": new RegExp(issueType, 'i') }).select("_id")
+            // // console.log(fetchIssueType)
+            // query.advtIssueOrMalarOrOthers = fetchIssueType ? fetchIssueType._id : null;
+
+        }
+        if (issueSubCategory) {
+
+            query.malarType = new RegExp(issueSubCategory, 'i')
+            // let fetchIssueSubCategory = await IssueType.findOne({ "issueSubCat": new RegExp(issueSubCategory, 'i') }).select("_id")
+            // // console.log(fetchIssueType)
+            // query.malarType = fetchIssueSubCategory ? fetchIssueSubCategory._id : null;
+
+        }
+
+        if (category) {
+
+            query["specialDiscount.discountCategory"] = new RegExp(category, 'i')
+            // let fetchCategory = await DiscountCategory.findOne({ "name": new RegExp(category, 'i') }).select("_id")
+
+            // query["specialDiscount.discountCategory"] = fetchCategory ? fetchCategory._id : null
+
+        }
+        // console.log(query)
+
+
+        const NewsPaperROs = await NewsPaperRO.find(query)
+            // .populate({
+            //     path: 'newsPaperName',
+            //     model: 'NewsPaper',
+            //     select: 'name'
+            // })
+            // .populate({
+            //     path: 'typeClientNameHere',
+            //     model: 'Client',
+            //     select: 'clientName'
+            // })
+            // .populate({
+            //     path: 'subAgent',
+            //     model: 'subAgentSchema',
+            //     select: 'name'
+            // }).populate({
+            //     path: 'editionsYouSelected',
+            //     model: 'advtEditionSchema',
+            //     select: 'editionName editionState'
+            // })
+            // .populate({
+            //     path: 'advtIssueOrMalarOrOthers',
+            //     model: 'issueSchema',
+            //     select: 'issueTypeName'
+
+            // })
+            // .populate({
+            //     path: 'malarType',
+            //     model: 'issueSubCatSchema',
+            //     select: 'issueId issueSubCat'
+
+            // })
+            // .populate({
+            //     path: 'specialDiscount.discountCategory',
+            //     model: 'DiscountCategory',
+            //     select: 'name'
+            // })
+            // .populate({
+            //     path: 'advtHue',
+            //     model: 'hueSchema',
+            //     select: 'hueData'
+            // })
+            // .populate({
+            //     path: 'advtPosition',
+            //     model: 'advtPositionSchema',
+            //     select: 'advtPos'
+            // })
+            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId isReleased isShifted isCancelled isReleased isShifted isCancelled").sort({ "roNumber": -1 });
+            
+        return res.json({ status: true, data: NewsPaperROs });
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};
+
+exports.deleteNewsPaperRO = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+
+        const NewsPaperROs = await NewsPaperRO.findByIdAndDelete(id)
+        if (NewsPaperROs) {
+
+            return res.json({ status: true, message: "Deleted succesfully." });
+        }
+        return res.json({ status: false, message: "Unable to delete.!!!" });
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};
