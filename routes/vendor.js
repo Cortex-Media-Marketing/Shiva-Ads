@@ -52,6 +52,16 @@ Vendor.get('/OOHVendorInfo/:id',tokenMiddleVerify , fetchOOHVendor);
 
 Vendor.post('/OOHVendorList',tokenMiddleVerify , listOfOOHVendors); 
 
+Vendor.delete('/deleteOOHVendor/:id',tokenMiddleVerify , deleteOOHVendor); 
+
+
+
+Vendor.post('/addYouTubeVendor',tokenMiddleVerify,Validation, addYouTubeVendor); 
+
+Vendor.patch('/updateYouTubeVendor',tokenMiddleVerify ,Validation, updateYouTubeVendor); 
+
+Vendor.get('/YouTubeVendorInfo/:id',tokenMiddleVerify , fetchYouTubeVendor); 
+
 
 
 module.exports = Vendor;

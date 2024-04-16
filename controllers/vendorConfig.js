@@ -212,6 +212,21 @@ fetchOOHVendor: (req, res) => {
 listOfOOHVendors: (req, res) => {
     exports.VendorList(req, res, OOHVendor);
 },
+deleteOOHVendor: (req, res) => {
+    exports.deleteVendor(req, res, OOHVendor);
+},
+
+////////////////////////////////////////////////////////// YouTube Vendors //////////////////////////////////////////////
+
+addYouTubeVendor: (req, res) => {
+    exports.addVendor(req, res, YouTubeVendor);
+},
+updateYouTubeVendor: (req, res) => {
+    exports.updateVendorDetail(req, res, YouTubeVendor);
+},
+fetchYouTubeVendor: (req, res) => {
+    exports.fetchVendorDetail(req, res, YouTubeVendor);
+},
 
 };
 
