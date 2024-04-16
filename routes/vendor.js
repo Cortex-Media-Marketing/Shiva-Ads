@@ -11,6 +11,17 @@ Vendor.patch('/updateNewsPaper',tokenMiddleVerify ,Validation, updateNewsPaperVe
 
 Vendor.get('/NewsPaperInfo/:id',tokenMiddleVerify , fetchNewsPaperVendor); 
 
+Vendor.post('/newsPaperVendorList',tokenMiddleVerify , listOfNewsPaperVendor); 
+
+Vendor.delete('/deleteNewsPaper/:id',tokenMiddleVerify , deleteNewsPaperVendor); 
+
+
+
+
+Vendor.post('/addTV',tokenMiddleVerify,Validation, addTVVendor); 
+
+Vendor.patch('/updateTV',tokenMiddleVerify ,Validation, updateTVVendor); 
+
 
 
 module.exports = Vendor;

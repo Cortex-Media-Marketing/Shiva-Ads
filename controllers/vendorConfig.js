@@ -149,6 +149,21 @@ updateNewsPaperVendor : (req, res) => {
 fetchNewsPaperVendor : (req, res) => {
     exports.fetchVendorDetail(req, res, NewsPaperVendor);
 },
+listOfNewsPaperVendor : (req, res) => {
+    exports.VendorList(req, res, NewsPaperVendor);
+},
+deleteNewsPaperVendor : (req, res) => {
+    exports.deleteVendor(req, res, NewsPaperVendor);
+},
+
+////////////////////////////////////////////////////////// TV Vendors //////////////////////////////////////////////
+
+addTVVendor : (req, res) => {
+    exports.addVendor(req, res, TVVendor);
+},
+updateTVVendor : (req, res) => {
+    exports.updateVendorDetail(req, res, TVVendor)   // function or const updateVendorDetail above after that we can use without exports
+},
 
 };
 

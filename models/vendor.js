@@ -66,10 +66,10 @@ const theatreSchema = new mongoose.Schema({
 }, { versionKey: false, timestamps: true });
 
 const NewsPaperVendor = mongoose.model('NewsPaperVendor', vendorSchema, config.dbPrefix + 'RODNEVREPAPSWEN')
+const TVVendor = mongoose.model('TVVendor', tvVendorSchema, config.dbPrefix + 'RODNEVVT')
 
 
 
 
 
-
-module.exports = { NewsPaperVendor}
+module.exports = { NewsPaperVendor, TVVendor}

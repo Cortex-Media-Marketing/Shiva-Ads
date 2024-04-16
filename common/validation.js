@@ -1192,6 +1192,79 @@ exports.Validation = (req, res, next) => {
     }
 
 
+    else if (path == '/addTV' ) {
+
+      schema = Joi.object({
+        category: Joi.string().required(),
+        name: Joi.string().required(),
+        type: Joi.string().required(),
+        companyName: Joi.string().required(),
+        agencyName: Joi.string().required(),
+        advertiserName: Joi.string().required(),
+        brandName: Joi.string().required(),
+        providerTiming: Joi.string().required(),
+        addressLine1: Joi.string().required(),
+        addressLine2: Joi.string().required(),
+        addressLine3: Joi.string().required(),
+        pincode: Joi.string().required(),
+        state: Joi.string().required(),
+        district: Joi.string().required(),
+        contactNumbers: Joi.array().items(Joi.object({
+          contactPerson: Joi.string(),
+          designation: Joi.string(),
+          primaryContact: Joi.boolean(),
+          contactType: Joi.string(),
+          contactNumber: Joi.string(),
+          extension: Joi.string(),
+          timingFrom: Joi.string(),
+          timingTo: Joi.string()
+        })),
+        contactEmails: Joi.array().items(Joi.object({
+          email: Joi.string().email(),
+          contactPerson: Joi.string(),
+          designation: Joi.string(),
+          primaryContact: Joi.boolean()
+        }))
+      });
+    }
+    else if (path == '/updateTV') {
+
+      schema = Joi.object({
+        _id: Joi.string().required(),
+        category: Joi.string().optional(),
+        name: Joi.string().optional(),
+        type: Joi.string().optional(),
+        companyName: Joi.string().optional(),
+        agencyName: Joi.string().optional(),
+        advertiserName: Joi.string().optional(),
+        brandName: Joi.string().optional(),
+        providerTiming: Joi.string().optional(),
+        addressLine1: Joi.string().optional(),
+        addressLine2: Joi.string().optional(),
+        addressLine3: Joi.string().optional(),
+        pincode: Joi.string().optional(),
+        state: Joi.string().optional(),
+        district: Joi.string().optional(),
+        contactNumbers: Joi.array().items(Joi.object({
+          contactPerson: Joi.string(),
+          designation: Joi.string(),
+          primaryContact: Joi.boolean(),
+          contactType: Joi.string(),
+          contactNumber: Joi.string(),
+          extension: Joi.string(),
+          timingFrom: Joi.string(),
+          timingTo: Joi.string() // This line should not have closing parenthesis here
+        })).optional(),
+        contactEmails: Joi.array().items(Joi.object({
+          email: Joi.string().email(),
+          contactPerson: Joi.string(),
+          designation: Joi.string(),
+          primaryContact: Joi.boolean()
+        })).optional()
+
+      })
+    }
+
     
     else {
 
