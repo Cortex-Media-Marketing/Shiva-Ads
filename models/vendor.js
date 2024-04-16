@@ -68,8 +68,9 @@ const theatreSchema = new mongoose.Schema({
 const NewsPaperVendor = mongoose.model('NewsPaperVendor', vendorSchema, config.dbPrefix + 'RODNEVREPAPSWEN')
 const TVVendor = mongoose.model('TVVendor', tvVendorSchema, config.dbPrefix + 'RODNEVVT')
 const RadioVendor = mongoose.model('RadioVendor', tvVendorSchema, config.dbPrefix + 'RODNEVOIDAR')
+const OOHVendor = mongoose.model('OOHVendor', radioVendorSchema, config.dbPrefix + 'RODNEVHOO')
 
 
 
 
-module.exports = { NewsPaperVendor, TVVendor, RadioVendor}
+module.exports = { NewsPaperVendor, TVVendor, RadioVendor,OOHVendor}

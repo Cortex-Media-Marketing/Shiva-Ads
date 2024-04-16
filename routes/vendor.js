@@ -44,4 +44,14 @@ Vendor.delete('/deleteRadioVendor/:id',tokenMiddleVerify , deleteRadioVendor);
 
 
 
+Vendor.post('/addOOHVendor',tokenMiddleVerify,Validation, addOOHVendor); 
+
+Vendor.patch('/updateOOHVendor',tokenMiddleVerify ,Validation, updateOOHVendor); 
+
+Vendor.get('/OOHVendorInfo/:id',tokenMiddleVerify , fetchOOHVendor); 
+
+Vendor.post('/OOHVendorList',tokenMiddleVerify , listOfOOHVendors); 
+
+
+
 module.exports = Vendor;

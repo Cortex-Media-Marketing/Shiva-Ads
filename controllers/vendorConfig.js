@@ -198,6 +198,20 @@ deleteTVVendor : (req, res) => {
 
     
 
+////////////////////////////////////////////////////////// OOH Vendors //////////////////////////////////////////////
+
+addOOHVendor: (req, res) => {
+    exports.addVendor(req, res, OOHVendor);
+},
+updateOOHVendor: (req, res) => {
+    exports.updateVendorDetail(req, res, OOHVendor);
+},
+fetchOOHVendor: (req, res) => {
+    exports.fetchVendorDetail(req, res, OOHVendor);
+},
+listOfOOHVendors: (req, res) => {
+    exports.VendorList(req, res, OOHVendor);
+},
 
 };
 
