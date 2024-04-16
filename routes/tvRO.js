@@ -16,6 +16,16 @@ tvRO.get('/tvRoFCTInfo/:id',tokenMiddleVerify , fetchTVROFCTDetail);
 
 tvRO.get('/isTvRoFCTGenerated/:id',tokenMiddleVerify , fetchTvRoFCTGenerated); 
 
+tvRO.post('/tvRoFCTList',tokenMiddleVerify , TVROFCTList); 
+
+tvRO.delete('/deleteTvRoFCT/:id',tokenMiddleVerify , deleteTVROFCT); 
+
+
+
+tvRO.post('/addTvRoSponsorship',tokenMiddleVerify,s3upload.fields([{ name: 'attachedFile', maxCount: 1 }]),Validation, addTvRoSponsorship); 
+
+tvRO.patch('/updateTvRoSponsorship',tokenMiddleVerify ,s3upload.fields([{ name: 'attachedFile', maxCount: 1 }]),Validation, updateTVROSponsorshipDetail); 
+
 
 
 module.exports = tvRO;
