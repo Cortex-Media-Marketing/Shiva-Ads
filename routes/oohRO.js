@@ -31,6 +31,14 @@ oohRO.post('/addOohBusAd',tokenMiddleVerify,s3upload.fields([{ name: 'attachedFi
 
 oohRO.patch('/updateOohBusAd',tokenMiddleVerify ,s3upload.fields([{ name: 'attachedFile', maxCount: 1 }]),Validation, updateOohBusAdDetail); 
 
+oohRO.get('/oohBusAdInfo/:id',tokenMiddleVerify , fetchOohBusAdDetail); 
+
+oohRO.get('/isOohBusAdRoGenerated/:id',tokenMiddleVerify , fetchOohBusAdROGenerated); 
+
+oohRO.post('/oohBusAdList',tokenMiddleVerify , oohBusAdList); 
+
+oohRO.delete('/deleteOohBusAd/:id',tokenMiddleVerify , deleteOohBusAd); 
+
 
 
 module.exports = oohRO;

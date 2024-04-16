@@ -316,3 +316,121 @@ exports.updateOohBusAdDetail = async (req, res) => {
         return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
     }
 };
+
+exports.fetchOohBusAdDetail = (req, res) => {
+    try {
+        let data = req.params;
+
+        OohBusAdModel.findById(data.id)
+            .then((exTVRO) => {
+
+                return res.json({ "status": true, "data": exTVRO });
+
+            }).catch((error) => {
+                return res.json({ "status": false, "message": error.message });
+            });
+    } catch (e) {
+        console.error(e)
+        return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+    }
+};
+exports.fetchOohBusAdROGenerated = (req, res) => {
+    try {
+        let data = req.params;
+
+        OohBusAdModel.findById(data.id)
+        .select("roNumber isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId")
+            .then((exOohBusAd) => {
+
+                return res.json({ "status": true, "data": exOohBusAd });
+
+            }).catch((error) => {
+                return res.json({ "status": false, "message": error.message });
+            });
+    } catch (e) {
+        console.error(e)
+        return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+    }
+};
+exports.oohBusAdList = async (req, res) => {
+    try {
+        const { roNumberFrom, roNumberTo, clientName,fromDate ,toDate, brand, advertisementType, place, position } = req.body;
+
+        //const query = { isReleased: true, isCancelled: false };
+        const query = {};
+
+        if (roNumberFrom && roNumberTo) {
+            query.roNumber = {
+                $gte: roNumberFrom,
+                $lte: roNumberTo
+            };
+        }
+
+        if (fromDate && toDate) {
+            const dateTo = new Date(toDate);
+            dateTo.setDate(dateTo.getDate() + 1);
+           
+            query.roDate = {
+                $gte: new Date(fromDate),
+                $lte: dateTo,
+            };
+        }
+
+        if (brand) {
+
+            query.brand = new RegExp(brand, 'i')
+
+        }
+        if (clientName) {
+
+            query.clientName = new RegExp(clientName, 'i')
+
+        }
+
+
+        if (advertisementType) {
+
+            query.advertisementType = advertisementType
+        }
+
+        if (place) {
+
+            query.place = new RegExp(place, 'i')
+
+        }
+        if (position) {
+
+            query.position = position
+
+
+        }
+
+
+        //  console.log(query)
+
+        const OOHROs = await OohBusAdModel.find(query).select("roNumber roDate clientName brand advertisementType place position nettAmount gst remindStatus isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId").sort({ "roNumber": -1 });
+
+        return res.json({ status: true, data: OOHROs });
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};
+
+exports.deleteOohBusAd = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+
+        const OOHROs = await OohBusAdModel.findByIdAndDelete(id)
+        if (OOHROs) {
+
+            return res.json({ status: true, message: "Deleted succesfully." });
+        }
+        return res.json({ status: false, message: "Unable to delete.!!!" });
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};
