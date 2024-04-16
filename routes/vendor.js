@@ -71,6 +71,15 @@ Vendor.post('/addTheatreVendor',tokenMiddleVerify,Validation, addTheatreVendor);
 
 Vendor.patch('/updateTheatreVendor',tokenMiddleVerify ,Validation, updateTheatreVendor); 
 
+Vendor.get('/TheatreVendorInfo/:id',tokenMiddleVerify , fetchTheatreVendor); 
+
+Vendor.post('/TheatreVendorList',tokenMiddleVerify , listOfTheatreVendors); 
+
+Vendor.delete('/deleteTheatreVendor/:id',tokenMiddleVerify , deleteTheatreVendor); 
+
+
+Vendor.post('/addOtherVendor',tokenMiddleVerify,Validation, addOtherVendor); 
+
 
 
 module.exports = Vendor;

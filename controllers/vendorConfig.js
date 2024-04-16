@@ -241,6 +241,21 @@ addTheatreVendor: (req, res) => {
 updateTheatreVendor: (req, res) => {
     exports.updateVendorDetail(req, res, TheatreVendor);
 },
+fetchTheatreVendor: (req, res) => {
+    exports.fetchVendorDetail(req, res, TheatreVendor);
+},
+listOfTheatreVendors: (req, res) => {
+    exports.VendorList(req, res, TheatreVendor);
+},
+deleteTheatreVendor: (req, res) => {
+    exports.deleteVendor(req, res, TheatreVendor);
+},
+
+////////////////////////////////////////////////////////// Other Vendors //////////////////////////////////////////////
+
+addOtherVendor: (req, res) => {
+    exports.addVendor(req, res, OtherVendor);
+},
 
 };
 
