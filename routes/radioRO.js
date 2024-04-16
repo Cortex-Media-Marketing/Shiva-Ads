@@ -57,5 +57,12 @@ radioRO.post('/addRadioRJ',tokenMiddleVerify,s3upload.fields([{ name: 'attachmen
 
 radioRO.patch('/updateRadioRJ',tokenMiddleVerify ,s3upload.fields([{ name: 'attachmentFile', maxCount: 1 }]),Validation, updateRadioRjMentionDetail); 
 
+radioRO.get('/radioRJInfo/:id',tokenMiddleVerify , fetchRadioRjMentionDetail); 
+
+radioRO.get('/isRadioRJGenerated/:id',tokenMiddleVerify , fetchRadioRjMentionGenerated); 
+
+radioRO.post('/radioRJList',tokenMiddleVerify , RadioRjMentionList); 
+
+radioRO.delete('/deleteRadioRJ/:id',tokenMiddleVerify , deleteRadioRjMention); 
 
 module.exports = radioRO;

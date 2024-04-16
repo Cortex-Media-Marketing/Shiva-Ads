@@ -127,7 +127,7 @@ exports.Validation = (req, res, next) => {
         })
       });
     }
-    //=====================================================     Client    ==========================================
+    //===================================================== Client ==========================================
     else if (path == '/add_a_client') {
 
       schema = Joi.object({
@@ -558,6 +558,7 @@ exports.Validation = (req, res, next) => {
         clientRate: Joi.number().required(),
         clientDiscountType: Joi.string().valid("TenSecRate4Client", "flatDiscount4Client", "flatRate4Client"),
         discountedValue4Client: Joi.number().optional(),
+        value4Client: Joi.number().optional(),
         clientBillingRate: Joi.number(),
         gst4Client: Joi.number(),
         nett4Client: Joi.number(),
@@ -602,6 +603,7 @@ exports.Validation = (req, res, next) => {
         clientRate: Joi.number().required(),
         clientDiscountType: Joi.string().valid("TenSecRate4Client", "flatDiscount4Client", "flatRate4Client"),
         discountedValue4Client: Joi.number().optional(),
+        value4Client: Joi.number().optional(),
         clientBillingRate: Joi.number(),
         gst4Client: Joi.number(),
         nett4Client: Joi.number(),
@@ -645,6 +647,7 @@ exports.Validation = (req, res, next) => {
         clientRate: Joi.number().required(),
         clientDiscountType: Joi.string().valid("TenSecRate4Client", "flatDiscount4Client", "flatRate4Client"),
         discountedValue4Client: Joi.number().optional(),
+        value4Client: Joi.number().optional(),
         clientBillingRate: Joi.number(),
         gst4Client: Joi.number(),
         nett4Client: Joi.number(),
@@ -691,6 +694,7 @@ exports.Validation = (req, res, next) => {
         clientRate: Joi.number().required(),
         clientDiscountType: Joi.string().valid("TenSecRate4Client", "flatDiscount4Client", "flatRate4Client"),
         discountedValue4Client: Joi.number().optional(),
+        value4Client: Joi.number().optional(),
         clientBillingRate: Joi.number(),
         gst4Client: Joi.number(),
         nett4Client: Joi.number(),
@@ -1118,167 +1122,7 @@ exports.Validation = (req, res, next) => {
         nett4Client: Joi.number().optional()
       })
     }
-    else if (path == '/addOohHoarding') {
-
-      schema = Joi.object({
-        roDate: Joi.date().default(new Date()),
-        clientName: Joi.string().required(),
-        brand: Joi.string().required(),
-        campaignPeriod: Joi.string().required(),
-        numberOfMonths: Joi.number().required(),
-        advertisementType: Joi.string(),
-        location: Joi.string(),
-        position: Joi.string(),
-        sizeInFeet: Joi.number(),
-        materialType: Joi.string(),
-        numberOfUnits: Joi.number(),
-        costPerUnit: Joi.number(),
-        totalAmount: Joi.number(),
-        nettAmount: Joi.number(),
-        discountType: Joi.string().valid('discountPercentage', 'flatDiscountAmount', 'flatMediaRate'),
-        gst: Joi.number(),
-        totalPayable: Joi.number(),
-        printAndMountingCost: Joi.number(),
-        discountedAmount: Joi.number(),
-        attachmentFile: Joi.string(),
-        note: Joi.string(),
-        clientDiscountType: Joi.string().valid('percentageFromTotalAmount', 'flatDiscount', 'flatRate'),
-        clientRate: Joi.number(),
-        discountedValue4Client: Joi.number(),
-        clientBillingRate: Joi.number(),
-        gst4Client: Joi.number(),
-        remindStatus: Joi.boolean().default(false),
-        isRoGenerated: Joi.boolean().optional(),
-        roUrl: Joi.string().optional().allow(''),
-        isClientRoGenerated: Joi.boolean().optional(),
-        isVendorRoGenerated: Joi.boolean().optional(),
-        clientRoUrl: Joi.string().optional().allow(''),
-        vendorRoUrl: Joi.string().optional().allow(''),
-        vendorId: Joi.string().optional().allow(''),
-        billValue4Client: Joi.number()
-
-      });
-    }
-    else if (path == '/updateOohHoarding') {
-
-      schema = Joi.object({
-        _id: Joi.string().required(),
-        roDate: Joi.string().optional(),
-        clientName: Joi.string().optional(),
-        brand: Joi.string().optional(),
-        campaignPeriod: Joi.string().optional(),
-        numberOfMonths: Joi.number().optional(),
-        advertisementType: Joi.string().optional(),
-        location: Joi.string().optional(),
-        position: Joi.string().optional(),
-        sizeInFeet: Joi.number().optional(),
-        materialType: Joi.string().optional(),
-        numberOfUnits: Joi.number().optional(),
-        costPerUnit: Joi.number().optional(),
-        totalAmount: Joi.number().optional(),
-        nettAmount: Joi.number().optional(),
-        discountType: Joi.string().valid('discountPercentage', 'flatDiscountAmount', 'flatMediaRate').optional(),
-        gst: Joi.number().optional(),
-        printAndMountingCost: Joi.number().optional(),
-        discountedAmount: Joi.number().optional(),
-        totalPayable: Joi.number().optional(),
-        attachmentFile: Joi.string().optional(),
-        note: Joi.string().optional(),
-        clientDiscountType: Joi.string().valid('percentageFromTotalAmount', 'flatDiscount', 'flatRate').optional(),
-        clientRate: Joi.number().optional(),
-        discountedValue4Client: Joi.number().optional(),
-        clientBillingRate: Joi.number().optional(),
-        gst4Client: Joi.number().optional(),
-        remindStatus: Joi.boolean().default(false).optional(),
-        isRoGenerated: Joi.boolean().optional(),
-        roUrl: Joi.string().optional().allow(''),
-        isClientRoGenerated: Joi.boolean().optional(),
-        isVendorRoGenerated: Joi.boolean().optional(),
-        clientRoUrl: Joi.string().optional().allow(''),
-        vendorRoUrl: Joi.string().optional().allow(''),
-        vendorId: Joi.string().optional().allow(''),
-        billValue4Client: Joi.number().optional()
-      })
-    }
-    else if (path == '/addOohBusAd') {
-
-      schema = Joi.object({
-        roDate: Joi.date().default(new Date()),
-        clientName: Joi.string().required(),
-        brand: Joi.string().required(),
-        campaignPeriod: Joi.string().required(),
-        numberOfMonths: Joi.number().required(),
-        advertisementType: Joi.string(),
-        place: Joi.string(),
-        position: Joi.string(),
-        numberOfBuses: Joi.number(),
-        costPerMonthPerBus: Joi.number(),
-        totalAmount: Joi.number(),
-        discountType: Joi.string().valid('discountPercentage', 'flatDiscountAmount', 'flatMediaRate'),
-        nettAmount: Joi.number(),
-        gst: Joi.number(),
-        totalPayable: Joi.number(),
-        printAndMountingCost: Joi.number(),
-        discountedAmount: Joi.number(),
-        note: Joi.string(),
-        attachedFile: Joi.string(),
-        clientDiscountType: Joi.string().valid('percentageFromTotalAmount', 'flatDiscount', 'flatRate'),
-        clientRate: Joi.number(),
-        discountedValue4Client: Joi.number(),
-        clientBillingRate: Joi.number(),
-        gst4Client: Joi.number(),
-        isRoGenerated: Joi.boolean().optional(),
-        roUrl: Joi.string().optional().allow(''),
-        isClientRoGenerated: Joi.boolean().optional(),
-        isVendorRoGenerated: Joi.boolean().optional(),
-        clientRoUrl: Joi.string().optional().allow(''),
-        vendorRoUrl: Joi.string().optional().allow(''),
-        vendorId: Joi.string().optional().allow(''),
-        remindStatus: Joi.boolean().default(false),
-        billValue4Client: Joi.number()
-
-      });
-    }
-    else if (path == '/updateOohBusAd') {
-
-      schema = Joi.object({
-        _id: Joi.string().required(),
-        roDate: Joi.date().default(new Date()),
-        clientName: Joi.string().optional(),
-        brand: Joi.string().optional(),
-        campaignPeriod: Joi.string().optional(),
-        numberOfMonths: Joi.number().optional(),
-        advertisementType: Joi.string().optional(),
-        place: Joi.string().optional(),
-        position: Joi.string().optional(),
-        numberOfBuses: Joi.number().optional(),
-        costPerMonthPerBus: Joi.number().optional(),
-        totalAmount: Joi.number().optional(),
-        discountType: Joi.string().valid('discountPercentage', 'flatDiscountAmount', 'flatMediaRate').optional(),
-        nettAmount: Joi.number().optional(),
-        gst: Joi.number().optional(),
-        totalPayable: Joi.number().optional(),
-        printAndMountingCost: Joi.number().optional(),
-        discountedAmount: Joi.number().optional(),
-        note: Joi.string().optional(),
-        attachedFile: Joi.string().optional(),
-        clientDiscountType: Joi.string().valid('percentageFromTotalAmount', 'flatDiscount', 'flatRate').optional(),
-        clientRate: Joi.number().optional(),
-        discountedValue4Client: Joi.number().optional(),
-        clientBillingRate: Joi.number().optional(),
-        isRoGenerated: Joi.boolean().optional(),
-        roUrl: Joi.string().optional().allow(''),
-        isClientRoGenerated: Joi.boolean().optional(),
-        isVendorRoGenerated: Joi.boolean().optional(),
-        clientRoUrl: Joi.string().optional().allow(''),
-        vendorRoUrl: Joi.string().optional().allow(''),
-        vendorId: Joi.string().optional().allow(''),
-        gst4Client: Joi.number().optional(),
-        remindStatus: Joi.boolean().default(false).optional(),
-        billValue4Client: Joi.number().optional()
-      })
-    }
-
+  
 
 
 

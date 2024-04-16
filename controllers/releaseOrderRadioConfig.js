@@ -1071,3 +1071,166 @@ exports.updateRadioRjMentionDetail = async (req, res) => {
     }
 };
 
+exports.fetchRadioRjMentionDetail = (req, res) => {
+    try {
+        let data = req.params;
+
+        RadioRjMention.findById(data.id)
+            .then((exRadioRjMention) => {
+
+                return res.json({ "status": true, "data": exRadioRjMention });
+
+            }).catch((error) => {
+                return res.json({ "status": false, "message": error.message });
+            });
+    } catch (e) {
+        console.error(e)
+        return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+    }
+};
+exports.fetchRadioRjMentionGenerated = (req, res) => {
+    try {
+        let data = req.params;
+
+        RadioRjMention.findById(data.id)
+        .select("roNumber isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId")
+            .then((exRadioRjMention) => {
+
+                return res.json({ "status": true, "data": exRadioRjMention });
+
+            }).catch((error) => {
+                return res.json({ "status": false, "message": error.message });
+            });
+    } catch (e) {
+        console.error(e)
+        return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+    }
+};
+exports.RadioRjMentionList = async (req, res) => {
+    try {
+
+        const { roNumberFrom, roNumberTo, station, fromDate, toDate, companyName, duration, agencyNameForBilling, advertiserNameForBilling } = req.body;
+
+        //const query = { isReleased: true, isCancelled: false };
+        const query = {};
+
+        if (roNumberFrom && roNumberTo) {
+            query.roNumber = {
+                $gte: roNumberFrom,
+                $lte: roNumberTo
+            };
+        }
+
+        if (fromDate && toDate) {
+            const dateTo = new Date(toDate);
+            dateTo.setDate(dateTo.getDate() + 1);
+
+            query.roDate = {
+                $gte: new Date(fromDate),
+                $lte: dateTo,
+            };
+        }
+
+        if (companyName) {
+
+            query.companyName = new RegExp(companyName, 'i')
+
+        }
+        if (station) {
+
+            query.station = new RegExp(station, 'i')
+
+        }
+
+
+        if (duration) {
+
+            query.adDuration = duration
+        }
+
+        if (agencyNameForBilling) {
+
+            query.agencyNameForBilling = new RegExp(agencyNameForBilling, 'i')
+
+        }
+        if (advertiserNameForBilling) {
+
+            query.advertiserNameForBilling = new RegExp(advertiserNameForBilling, 'i')
+
+
+        }
+
+
+        const RadioRjMentions = await RadioRjMention.find(query)
+            // .populate({
+            //     path: 'newsPaperName',
+            //     model: 'NewsPaper',
+            //     select: 'name'
+            // })
+            // .populate({
+            //     path: 'typeClientNameHere',
+            //     model: 'Client',
+            //     select: 'clientName'
+            // })
+            // .populate({
+            //     path: 'subAgent',
+            //     model: 'subAgentSchema',
+            //     select: 'name'
+            // }).populate({
+            //     path: 'editionsYouSelected',
+            //     model: 'advtEditionSchema',
+            //     select: 'editionName editionState'
+            // })
+            // .populate({
+            //     path: 'advtIssueOrMalarOrOthers',
+            //     model: 'issueSchema',
+            //     select: 'issueTypeName'
+
+            // })
+            // .populate({
+            //     path: 'malarType',
+            //     model: 'issueSubCatSchema',
+            //     select: 'issueId issueSubCat'
+
+            // })
+            // .populate({
+            //     path: 'specialDiscount.discountCategory',
+            //     model: 'DiscountCategory',
+            //     select: 'name'
+            // })
+            // .populate({
+            //     path: 'advtHue',
+            //     model: 'hueSchema',
+            //     select: 'hueData'
+            // })
+            // .populate({
+            //     path: 'advtPosition',
+            //     model: 'advtPositionSchema',
+            //     select: 'advtPos'
+            // })
+            .select("roNumber media client companyName channel agencyNameForBilling advertiserNameForBilling station adDuration gst nettAmount remindStatus isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId roDate createdAt").sort({ "roNumber": -1 });
+
+        return res.json({ status: true, data: RadioRjMentions });
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};
+
+exports.deleteRadioRjMention = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+
+        const RadioRjMentions = await RadioRjMention.findByIdAndDelete(id)
+        if (RadioRjMentions) {
+
+            return res.json({ status: true, message: "Deleted succesfully." });
+        }
+        return res.json({ status: false, message: "Unable to delete.!!!" });
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};
