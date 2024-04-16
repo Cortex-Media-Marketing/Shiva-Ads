@@ -26,6 +26,13 @@ tvRO.post('/addTvRoSponsorship',tokenMiddleVerify,s3upload.fields([{ name: 'atta
 
 tvRO.patch('/updateTvRoSponsorship',tokenMiddleVerify ,s3upload.fields([{ name: 'attachedFile', maxCount: 1 }]),Validation, updateTVROSponsorshipDetail); 
 
+tvRO.get('/tvRoSponsorshipInfo/:id',tokenMiddleVerify , fetchTVROSponsorshipDetail); 
+
+tvRO.get('/isTvRoSponsorshipGenerated/:id',tokenMiddleVerify , fetchTvRoSponsorshipGenerated); 
+
+tvRO.post('/tvRoSponsorshipList',tokenMiddleVerify , TVROSponsorshipList); 
+
+tvRO.delete('/deleteTvRoSponsorship/:id',tokenMiddleVerify , deleteTVROSponsorship); 
 
 
 module.exports = tvRO;
