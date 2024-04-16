@@ -324,3 +324,123 @@ exports.sendMailWithAtt  = async(req,res) =>{
     console.error('Error sending email:', err);
   }
 }
+
+async function sendEmailWithAttachment(to, subject,content, attachmentContent) {
+const rawEmail = await createRawEmail(to, subject,content, attachmentContent);
+const params = {
+  Source: "gokul@cortexmarketing.in",
+  Destinations: to,
+
+  RawMessage: {
+    Data: rawEmail
+  }
+};
+
+return ses.sendRawEmail(params).promise();
+}
+
+function createRawEmail(to, subject,content ,attachmentContent) {
+const rawEmail = `From: gokul@cortexmarketing.in\n` +
+    `To: ${to}\n` +
+    `Subject: ${subject}\n` +
+    `MIME-Version: 1.0\n` +
+    `Content-Type: multipart/mixed; boundary="NextPart"\n\n` +
+    `--NextPart\n` +
+    `Content-Type: text/plain\n\n` +
+    `${content}\n\n`
+    // `Hello,\n\n` +
+    // `Please find the attached files.\n\n` 
+    + attachmentContent +
+    `--NextPart--`;
+
+return rawEmail;
+}
+
+
+exports.htmlToPDF  = async(req,res) =>{  
+try {
+
+   const {outType,toName,toCompanyName,toCompanyLocation,dealType,roNumber,roDate,companyName,channelName,agencyName,advertiserName,campaignStart,campaignEnd,campaignDays,ratePerSec,timeRange,addDuration,spotPerDay,totalSpot,totalSecond,netAmount,gstAmount,payAfterTax,roGeneratedAt} = req.body
+  
+  const reqData = req.body;
+
+  const s3Params = {
+    Bucket:config.shivaAdsAWS_S3.transDocBucket,
+    Key: `${outType}.html`
+  }
+    const s3Response = await s3.getObject(s3Params).promise();
+    htmlVal = s3Response.Body.toString('utf-8');
+    const htmlPlaceHolderValue = await replacePlaceholders(htmlVal,reqData)
+
+  async function htmlToPdf(htmlString, outputPath) {
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+  
+      // Set the viewport size to fit the entire content without scrolling
+      await page.setViewport({
+          width: 1920, // Adjust the width as needed
+          height: 3000, // Adjust the height as needed to fit all content
+          deviceScaleFactor: 1,
+      });
+  
+      // Set the HTML content of the page
+      await page.setContent(htmlString);
+  
+      // Generate PDF from the page content
+      await page.pdf({
+          path: outputPath,
+          format: 'A4',
+          printBackground: true,
+          displayHeaderFooter: false,
+          margin: { top: '0px', bottom: '0px', left: '0px', right: '0px' },
+          scale: 0.7, // Adjust the scale factor to fit all content
+      });
+  
+      await browser.close();
+  }
+
+
+async function uploadToS3(filePath, fileNameValue, bucketName) {
+  const fileContent = fs.readFileSync(filePath);
+
+  const params = {
+      Bucket: bucketName,
+      Key: Date.now().toString()+"_"+ fileNameValue,
+      Body: fileContent
+  };
+  fs.unlinkSync(outputPath);
+
+  return s3.upload(params).promise();
+}
+// Example usage
+const htmlString = htmlPlaceHolderValue
+const outputPath = `./public/files/${outType}.pdf`;
+const fileNameValue = `${outType}.pdf`;
+
+// Convert HTML to PDF
+htmlToPdf(htmlString, outputPath)
+  .then(() => {
+      console.log('PDF generated successfully');
+      // Upload PDF to S3
+      // 
+      return uploadToS3(outputPath, fileNameValue, config.shivaAdsAWS_S3.bucket);
+  })
+  .then(data => {console.log('File uploaded to S3:', data.Location);res.json({status:true,location:data.Location})})
+  .catch(error => console.error('Error:', error));
+
+
+
+} catch (err) {
+  res.json({status:false,message:"Failed to send mail",err})
+  console.error('Error sending email:', err);
+}
+}
+
+function replacePlaceholders(template, data) {
+  let populatedContent = template;
+  for (const key in data) {
+      const placeholder = `{${key}}`;
+      populatedContent = populatedContent.replace(placeholder, data[key]);
+  }
+  return populatedContent;
+}
