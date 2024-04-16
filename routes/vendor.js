@@ -32,6 +32,16 @@ Vendor.delete('/deleteTV/:id',tokenMiddleVerify , deleteTVVendor);
 
 Vendor.post('/addRadioVendor',tokenMiddleVerify,Validation, addRadioVendor); 
 
+Vendor.patch('/updateRadioVendor',tokenMiddleVerify ,Validation, updateRadioVendor); 
+
+Vendor.get('/RadioVendorInfo/:id',tokenMiddleVerify , fetchRadioVendor); 
+
+Vendor.post('/RadioVendorList',tokenMiddleVerify , listOfRadioVendors); 
+
+Vendor.delete('/deleteRadioVendor/:id',tokenMiddleVerify , deleteRadioVendor); 
+
+
+
 
 
 module.exports = Vendor;

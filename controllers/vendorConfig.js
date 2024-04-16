@@ -181,7 +181,24 @@ deleteTVVendor : (req, res) => {
     addRadioVendor: (req, res) => {
         exports.addVendor(req, res, RadioVendor);
     },
+    updateRadioVendor: (req, res) => {
+        exports.updateVendorDetail(req, res, RadioVendor);
+    },
+    fetchRadioVendor: (req, res) => {
+        exports.fetchVendorDetail(req, res, RadioVendor);
+    },
+    listOfRadioVendors: (req, res) => {
+        exports.VendorList(req, res, RadioVendor);
+    },
+    deleteRadioVendor: (req, res) => {
+        exports.deleteVendor(req, res, RadioVendor);
+    },
+
+
+
     
+
+
 };
 
 
