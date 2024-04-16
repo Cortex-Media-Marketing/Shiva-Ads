@@ -1192,7 +1192,7 @@ exports.Validation = (req, res, next) => {
     }
 
 
-    else if (path == '/addTV' ) {
+    else if (path == '/addTV' || path == '/addRadioVendor') {
 
       schema = Joi.object({
         category: Joi.string().required(),
@@ -1227,7 +1227,7 @@ exports.Validation = (req, res, next) => {
         }))
       });
     }
-    else if (path == '/updateTV') {
+    else if (path == '/updateTV' || path == '/updateRadioVendor') {
 
       schema = Joi.object({
         _id: Joi.string().required(),

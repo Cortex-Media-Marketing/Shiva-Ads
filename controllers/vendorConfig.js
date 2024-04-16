@@ -164,7 +164,24 @@ addTVVendor : (req, res) => {
 updateTVVendor : (req, res) => {
     exports.updateVendorDetail(req, res, TVVendor)   // function or const updateVendorDetail above after that we can use without exports
 },
+fetchTVVendor : (req, res) => {
+    exports.fetchVendorDetail(req, res, TVVendor)
+},
+listOfTVVendors : (req, res) => {
+    exports.VendorList(req, res, TVVendor)
+},
+deleteTVVendor : (req, res) => {
+    exports.deleteVendor(req, res, TVVendor)
+},
 
+
+
+////////////////////////////////////////////////////////// Radio Vendors //////////////////////////////////////////////
+
+    addRadioVendor: (req, res) => {
+        exports.addVendor(req, res, RadioVendor);
+    },
+    
 };
 
 

@@ -22,6 +22,16 @@ Vendor.post('/addTV',tokenMiddleVerify,Validation, addTVVendor);
 
 Vendor.patch('/updateTV',tokenMiddleVerify ,Validation, updateTVVendor); 
 
+Vendor.get('/TVInfo/:id',tokenMiddleVerify , fetchTVVendor); 
+
+Vendor.post('/TVVendorList',tokenMiddleVerify , listOfTVVendors); 
+
+Vendor.delete('/deleteTV/:id',tokenMiddleVerify , deleteTVVendor); 
+
+
+
+Vendor.post('/addRadioVendor',tokenMiddleVerify,Validation, addRadioVendor); 
+
 
 
 module.exports = Vendor;
