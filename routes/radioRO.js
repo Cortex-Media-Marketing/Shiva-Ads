@@ -28,5 +28,13 @@ radioRO.post('/addRadioNTR',tokenMiddleVerify,s3upload.fields([{ name: 'attachme
 
 radioRO.patch('/updateRadioNTR',tokenMiddleVerify ,s3upload.fields([{ name: 'attachmentFile', maxCount: 1 }]),Validation, updateRadioNTRDetail); 
 
+radioRO.get('/radioNTRInfo/:id',tokenMiddleVerify , fetchRadioNTRDetail); 
+
+radioRO.get('/isRadioNTRGenerated/:id',tokenMiddleVerify , fetchRadioNTRGenerated); 
+
+radioRO.post('/radioNTRList',tokenMiddleVerify , RadioNTRList); 
+
+radioRO.delete('/deleteRadioNTR/:id',tokenMiddleVerify , deleteRadioNTR); 
+
 
 module.exports = radioRO;
