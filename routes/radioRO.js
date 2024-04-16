@@ -47,5 +47,15 @@ radioRO.get('/radioNFCTInfo/:id',tokenMiddleVerify , fetchRadioNFCTDetail);
 
 radioRO.get('/isRadioNFCTGenerated/:id',tokenMiddleVerify , fetchRadioNFCTGenerated); 
 
+radioRO.post('/radioNFCTList',tokenMiddleVerify , RadioNFCTList); 
+
+radioRO.delete('/deleteRadioNFCT/:id',tokenMiddleVerify , deleteRadioNFCT); 
+
+///////////////////////////////////////////////////////////   Radio RjMention ////////////////////////////////////////////////////
+
+radioRO.post('/addRadioRJ',tokenMiddleVerify,s3upload.fields([{ name: 'attachmentFile', maxCount: 1 }]),Validation, addRadioRjMention); 
+
+radioRO.patch('/updateRadioRJ',tokenMiddleVerify ,s3upload.fields([{ name: 'attachmentFile', maxCount: 1 }]),Validation, updateRadioRjMentionDetail); 
+
 
 module.exports = radioRO;
