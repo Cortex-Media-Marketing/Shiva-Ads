@@ -17,6 +17,20 @@ oohRO.patch('/updateOohHoarding',tokenMiddleVerify ,s3upload.fields([{ name: 'at
 
 oohRO.get('/oohHoardingInfo/:id',tokenMiddleVerify , fetchOohHoardingDetail); 
 
+oohRO.get('/isOohHoardingRoGenerated/:id',tokenMiddleVerify , fetchOohHoardingGenerated); 
+
+oohRO.post('/oohHoardingList',tokenMiddleVerify , oohHoardingList); 
+
+oohRO.delete('/deleteOohHoarding/:id',tokenMiddleVerify , deleteOohHoarding); 
+
+
+
+///////////////////////////////////////////        BusAds       /////////////////////////////////////////////////////
+
+oohRO.post('/addOohBusAd',tokenMiddleVerify,s3upload.fields([{ name: 'attachedFile', maxCount: 1 }]),Validation, addOohBusAd); 
+
+oohRO.patch('/updateOohBusAd',tokenMiddleVerify ,s3upload.fields([{ name: 'attachedFile', maxCount: 1 }]),Validation, updateOohBusAdDetail); 
+
 
 
 module.exports = oohRO;
