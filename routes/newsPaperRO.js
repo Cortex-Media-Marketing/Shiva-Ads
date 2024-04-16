@@ -22,6 +22,13 @@ NewsPaperRO.post('/shiftedNewspaperROList',tokenMiddleVerify , shiftedNewsPaperR
 NewsPaperRO.post('/cancelledNewspaperROList',tokenMiddleVerify , cancelledNewsPaperROList); 
 
 NewsPaperRO.delete('/deleteNewsPaperRO/:id',tokenMiddleVerify , deleteNewsPaperRO); 
+// ADVT Shifting
+NewsPaperRO.post('/addADVTShiftingNPRO',tokenMiddleVerify,Validation, addADVTShiftingNPRO); 
 
+NewsPaperRO.patch('/updateADVTShiftingNPRO',tokenMiddleVerify ,Validation, updateADVTShiftingNPRO); 
+
+NewsPaperRO.get('/advtShiftingNPRO/:id',tokenMiddleVerify , fetchNewsPaperRODetail); 
+
+NewsPaperRO.post('/advtShiftingNPROList',tokenMiddleVerify , newsPaperROList); 
 
 module.exports = NewsPaperRO;

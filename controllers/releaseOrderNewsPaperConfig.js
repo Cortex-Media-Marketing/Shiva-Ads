@@ -366,3 +366,363 @@ exports.deleteNewsPaperRO = async (req, res) => {
         return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
     }
 };
+
+exports.newsPaperROShiftCancelList = async (req, res) => {
+    try {
+        const { roNumberFrom, roNumberTo, roDateFrom, roDateTo, adsProvider, client, subAgent, releaseDate, issueType, issueSubCategory, category } = req.body;
+
+        const query = {
+            "isCancelled": false,
+            "isShifted": false
+        };
+
+        if (roNumberFrom && roNumberTo) {
+            query.roNumber = {
+                $gte: roNumberFrom,
+                $lte: roNumberTo
+            };
+        }
+
+        if (roDateFrom && roDateTo) {
+            const toDate = new Date(roDateTo);
+            toDate.setDate(toDate.getDate() + 1);
+            query.createdAt = {
+                $gte: new Date(roDateFrom),
+                $lte: toDate
+            };
+        }
+        // if (adsProvider) {
+        //     query.NewsPaperROType = { $regex: new RegExp(adsProvider, 'i') };
+        // }
+
+        if (client) {
+
+            query.typeClientNameHere = new RegExp(client, 'i')
+            // let fetchClient = await Client.findOne({ "clientName": new RegExp(client, 'i') }).select("_id")
+            // // console.log(fetchClient)
+            // query.typeClientNameHere = fetchClient ? fetchClient._id : null;
+
+        }
+        if (subAgent) {
+
+            query.subAgent = new RegExp(subAgent, 'i')
+            // let fetchSubAgent = await SubAgent.findOne({ "name": new RegExp(subAgent, 'i') }).select("_id")
+            // // console.log(fetchSubAgent)
+            // query.subAgent = fetchSubAgent ? fetchSubAgent._id : null;
+        }
+
+
+        if (releaseDate) {
+            const toDate = new Date(releaseDate);
+            toDate.setDate(toDate.getDate() + 1);
+
+            query.releaseDate = {
+                $gte: new Date(releaseDate),
+                $lte: toDate
+            };
+        }
+
+        if (issueType) {
+
+            query.advtIssueOrMalarOrOthers = new RegExp(issueType, 'i')
+            // let fetchIssueType = await IssuesOrMalarModel.findOne({ "issueTypeName": new RegExp(issueType, 'i') }).select("_id")
+            // // console.log(fetchIssueType)
+            // query.advtIssueOrMalarOrOthers = fetchIssueType ? fetchIssueType._id : null;
+
+        }
+        if (issueSubCategory) {
+
+            query.malarType = new RegExp(issueSubCategory, 'i')
+            // let fetchIssueSubCategory = await IssueType.findOne({ "issueSubCat": new RegExp(issueSubCategory, 'i') }).select("_id")
+            // // console.log(fetchIssueType)
+            // query.malarType = fetchIssueSubCategory ? fetchIssueSubCategory._id : null;
+
+        }
+
+        if (category) {
+
+            query["specialDiscount.discountCategory"] = new RegExp(category, 'i')
+            // let fetchCategory = await DiscountCategory.findOne({ "name": new RegExp(category, 'i') }).select("_id")
+
+            // query["specialDiscount.discountCategory"] = fetchCategory ? fetchCategory._id : null
+
+        }
+        // console.log(query)
+
+
+        const NewsPaperROs = await NewsPaperRO.find(query)
+            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isReleased isShifted isCancelled").sort({ "roNumber": -1 });
+
+        return res.json({ status: true, data: NewsPaperROs });
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};
+exports.shiftedNewsPaperROList = async (req, res) => {
+    try {
+        const { roNumberFrom, roNumberTo, roDateFrom, roDateTo, adsProvider, client, subAgent, releaseDate, issueType, issueSubCategory, category } = req.body;
+
+        const query = { isReleased: false, isCancelled: false, isShifted: true };
+
+        if (roNumberFrom && roNumberTo) {
+            query.roNumber = {
+                $gte: roNumberFrom,
+                $lte: roNumberTo
+            };
+        }
+
+        if (roDateFrom && roDateTo) {
+            const toDate = new Date(roDateTo);
+            toDate.setDate(toDate.getDate() + 1);
+            query.createdAt = {
+                $gte: new Date(roDateFrom),
+                $lte: toDate
+            };
+        }
+        // if (adsProvider) {
+        //     query.NewsPaperROType = { $regex: new RegExp(adsProvider, 'i') };
+        // }
+
+        if (client) {
+
+            query.typeClientNameHere = new RegExp(client, 'i')
+            // let fetchClient = await Client.findOne({ "clientName": new RegExp(client, 'i') }).select("_id")
+            // // console.log(fetchClient)
+            // query.typeClientNameHere = fetchClient ? fetchClient._id : null;
+
+        }
+        if (subAgent) {
+
+            query.subAgent = new RegExp(subAgent, 'i')
+            // let fetchSubAgent = await SubAgent.findOne({ "name": new RegExp(subAgent, 'i') }).select("_id")
+            // // console.log(fetchSubAgent)
+            // query.subAgent = fetchSubAgent ? fetchSubAgent._id : null;
+        }
+
+
+        if (releaseDate) {
+            const toDate = new Date(releaseDate);
+            toDate.setDate(toDate.getDate() + 1);
+
+            query.releaseDate = {
+                $gte: new Date(releaseDate),
+                $lte: toDate
+            };
+        }
+
+        if (issueType) {
+
+            query.advtIssueOrMalarOrOthers = new RegExp(issueType, 'i')
+            // let fetchIssueType = await IssuesOrMalarModel.findOne({ "issueTypeName": new RegExp(issueType, 'i') }).select("_id")
+            // // console.log(fetchIssueType)
+            // query.advtIssueOrMalarOrOthers = fetchIssueType ? fetchIssueType._id : null;
+
+        }
+        if (issueSubCategory) {
+
+            query.malarType = new RegExp(issueSubCategory, 'i')
+            // let fetchIssueSubCategory = await IssueType.findOne({ "issueSubCat": new RegExp(issueSubCategory, 'i') }).select("_id")
+            // // console.log(fetchIssueType)
+            // query.malarType = fetchIssueSubCategory ? fetchIssueSubCategory._id : null;
+
+        }
+
+        if (category) {
+
+
+            query["specialDiscount.discountCategory"] = new RegExp(category, 'i')
+            // let fetchCategory = await DiscountCategory.findOne({ "name": new RegExp(category, 'i') }).select("_id")
+
+            // query["specialDiscount.discountCategory"] = fetchCategory ? fetchCategory._id : null
+
+        }
+        // console.log(query)
+
+
+        const NewsPaperROs = await NewsPaperRO.find(query)
+            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isReleased isShifted isCancelled").sort({ "roNumber": -1 });
+
+        return res.json({ status: true, data: NewsPaperROs });
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};
+
+exports.cancelledNewsPaperROList = async (req, res) => {
+    try {
+        const { roNumberFrom, roNumberTo, roDateFrom, roDateTo, adsProvider, client, subAgent, releaseDate, issueType, issueSubCategory, category } = req.body;
+
+        const query = { isCancelled: true };
+
+        if (roNumberFrom && roNumberTo) {
+            query.roNumber = {
+                $gte: roNumberFrom,
+                $lte: roNumberTo
+            };
+        }
+
+        if (roDateFrom && roDateTo) {
+            const toDate = new Date(roDateTo);
+            toDate.setDate(toDate.getDate() + 1);
+            query.createdAt = {
+                $gte: new Date(roDateFrom),
+                $lte: toDate
+            };
+        }
+        // if (adsProvider) {
+        //     query.NewsPaperROType = { $regex: new RegExp(adsProvider, 'i') };
+        // }
+
+        if (client) {
+
+            query.typeClientNameHere = new RegExp(client, 'i')
+            // let fetchClient = await Client.findOne({ "clientName": new RegExp(client, 'i') }).select("_id")
+            // // console.log(fetchClient)
+            // query.typeClientNameHere = fetchClient ? fetchClient._id : null;
+
+        }
+        if (subAgent) {
+
+            query.subAgent = new RegExp(subAgent, 'i')
+            // let fetchSubAgent = await SubAgent.findOne({ "name": new RegExp(subAgent, 'i') }).select("_id")
+            // // console.log(fetchSubAgent)
+            // query.subAgent = fetchSubAgent ? fetchSubAgent._id : null;
+        }
+
+
+        if (releaseDate) {
+            const toDate = new Date(releaseDate);
+            toDate.setDate(toDate.getDate() + 1);
+
+            query.releaseDate = {
+                $gte: new Date(releaseDate),
+                $lte: toDate
+            };
+        }
+
+        if (issueType) {
+
+            query.advtIssueOrMalarOrOthers = new RegExp(issueType, 'i')
+            // let fetchIssueType = await IssuesOrMalarModel.findOne({ "issueTypeName": new RegExp(issueType, 'i') }).select("_id")
+            // // console.log(fetchIssueType)
+            // query.advtIssueOrMalarOrOthers = fetchIssueType ? fetchIssueType._id : null;
+
+        }
+        if (issueSubCategory) {
+
+            query.malarType = new RegExp(issueSubCategory, 'i')
+            // let fetchIssueSubCategory = await IssueType.findOne({ "issueSubCat": new RegExp(issueSubCategory, 'i') }).select("_id")
+            // // console.log(fetchIssueType)
+            // query.malarType = fetchIssueSubCategory ? fetchIssueSubCategory._id : null;
+
+        }
+
+        if (category) {
+
+            query["specialDiscount.discountCategory"] = new RegExp(category, 'i')
+            // let fetchCategory = await DiscountCategory.findOne({ "name": new RegExp(category, 'i') }).select("_id")
+
+            // query["specialDiscount.discountCategory"] = fetchCategory ? fetchCategory._id : null
+
+        }
+        // console.log(query)
+
+
+        const NewsPaperROs = await NewsPaperRO.find(query)
+            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isReleased isShifted isCancelled").sort({ "roNumber": -1 });
+
+        return res.json({ status: true, data: NewsPaperROs });
+    } catch (error) {
+        console.error(error);
+        return res.json({ status: false, message: 'Oops! Something went wrong. Please try again later' });
+    }
+};
+
+exports.addADVTShiftingNPRO = async (req, res) => {
+    try {
+        let data = req.body;
+        let createrId = req.userId
+      
+        const adminUser = await Admin.findOne({ _id: createrId });
+        if (!adminUser) {
+            throw new Error("Invalid createrId. User not found in admin collection.");
+        }
+
+        
+        const exNPRO = await NewsPaperRO.findOne({ "_id": data.npRoId });
+        if (exNPRO) {
+       let releaseDate 
+      
+            if (exNPRO.releaseDate.length === 0) {
+                releaseDate = Date.now();
+            } else {
+                // Convert the date strings to Date objects
+                const dateObjects = exNPRO.releaseDate.map(dateString => new Date(dateString));
+            
+                // Find the most recent date
+                const mostRecentDate = new Date(Math.max.apply(null, dateObjects));
+            
+                // Set the most recent date to exNPRO.releaseDate
+               releaseDate = mostRecentDate.toISOString();
+            }
+            let newObj = {
+                npRoId: exNPRO._id,
+                originalDate: releaseDate,
+                reason: data.reason,
+                shiftedBy: adminUser.name,
+                shiftedOn: Date.now(),
+                shiftedRO: data.shiftedRO ? data.shiftedRO : exNPRO.roNumber
+            }
+            let shiftedData = await NewsPaperROShifting.create(newObj);
+            if (shiftedData) {
+
+                return res.json({ "status": true, "message": "News Paper Release Order shifted successfully." });
+            } else {
+                console.error(shiftedData)
+                throw new Error("Oops! Something went wrong.");
+            }
+        } else {
+            throw new Error("Oops! Something went wrong.");
+        }
+    } catch (e) {
+        console.error(e);
+        console.error(e.stack);
+        return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+    }
+};
+
+exports.updateADVTShiftingNPRO = async (req, res) => {
+    try {
+        let data = req.body;
+        let createrId = req.userId
+      
+        const adminUser = await Admin.findOne({ _id: createrId });
+        if (!adminUser) {
+            throw new Error("Invalid createrId. User not found in admin collection.");
+        }
+
+        
+            let newObj = {
+                originalDate: data.originalDate,
+                reason: data.reason,
+                shiftedBy: adminUser.name,
+                shiftedOn: Date.now(),
+                shiftedRO:  data.shiftedRO
+            }
+            let shiftedData = await NewsPaperROShifting.findByIdAndUpdate(data._id,newObj,{new:true});
+            if (shiftedData) {
+
+                return res.json({ "status": true, "message": "News Paper Release Order ADVT shifting updated successfully." });
+            } else {
+                
+                return res.json({ "status": false, "message": "Unable to update.!!!" });
+            }
+      
+    } catch (e) {
+        console.error(e);
+       
+        return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+    }
+};
