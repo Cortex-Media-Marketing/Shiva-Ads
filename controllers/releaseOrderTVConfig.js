@@ -208,3 +208,23 @@ exports.fetchTVROFCTDetail = (req, res) => {
         return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
     }
 };
+
+
+exports.fetchTvRoFCTGenerated = (req, res) => {
+    try {
+        let data = req.params;
+
+        TvRoFctModel.findById(data.id)
+        .select("roNumber isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId")
+            .then((exTvRoFct) => {
+
+                return res.json({ "status": true, "data": exTvRoFct });
+
+            }).catch((error) => {
+                return res.json({ "status": false, "message": error.message });
+            });
+    } catch (e) {
+        console.error(e)
+        return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+    }
+};

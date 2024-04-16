@@ -14,6 +14,8 @@ tvRO.patch('/updateTvRoFCT',tokenMiddleVerify ,s3upload.fields([{ name: 'attache
 
 tvRO.get('/tvRoFCTInfo/:id',tokenMiddleVerify , fetchTVROFCTDetail); 
 
+tvRO.get('/isTvRoFCTGenerated/:id',tokenMiddleVerify , fetchTvRoFCTGenerated); 
+
 
 
 module.exports = tvRO;
