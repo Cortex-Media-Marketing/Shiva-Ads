@@ -629,3 +629,179 @@ exports.deleteRadioNTR = async (req, res) => {
 };
 
 
+
+//////////////////////////////////////////////////   NFCT ///////////////////////////////////////////////////////////////
+
+exports.addRadioNFCT = async (req, res) => {
+    let data = req.body;
+
+    const TagLineFile = req.files['attachmentFile'] ? req.files['attachmentFile'][0] : null;
+    //  console.log(TagLineFile)
+
+    let uploadedFile
+    if (TagLineFile) {
+        uploadedFile = await new Promise((resolve) => {
+            fileUpload(TagLineFile, (uploadData) => {
+                // console.log(uploadData)
+                if (uploadData.status) {
+                    resolve(uploadData.url);
+                }
+                // else {
+                //     res.json({ "status": false, message: "Error occurred while uploading tagLineFile, please try again" });
+                //     return;
+                // }
+            }).catch(e => console.error(e));
+        });
+    }
+
+    data.attachmentFile = uploadedFile;
+
+    //console.log(data)
+    data.roNumber = await GenerateNewRoNumber()
+
+    if (data && data.coSponsor == 'false') {
+
+        data.csProgramDate = null
+        data.csSelectedPrograms = []
+    }
+    if (data && data.namingRights == 'false') {
+
+        data.nrProgramDate = null
+        data.nrSelectedPrograms = null
+    }
+    if (data && data.dayBranding == 'false') {
+
+        data.dbProgramDate = null
+
+    }
+    if (data && data.assocDayBranding == 'false') {
+
+        data.adbProgramDate = null
+
+    }
+
+    RadioNFCT.create(data)
+        .then((latestRadioNFCT) => {
+            if (latestRadioNFCT) {
+                return res.json({ "status": true, "message": "Added successfully." });
+            } else {
+                throw new Error("Oops! Something went wrong.");
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            return res.json({ "status": false, "message": error.message || "Oops! Something went wrong. Please try again later" });
+        });
+};
+
+
+exports.updateRadioNFCTDetail = async (req, res) => {
+    try {
+        let data = req.body;
+
+        const TagLineFile = req.files['attachmentFile'] ? req.files['attachmentFile'][0] : null;
+
+        let uploadedFile
+        if (TagLineFile) {
+            uploadedFile = await new Promise((resolve) => {
+                fileUpload(TagLineFile, (uploadData) => {
+                    // console.log(uploadData)
+                    if (uploadData.status) {
+                        resolve(uploadData.url);
+                    }
+                    // else {
+                    //     res.json({ "status": false, message: "Error occurred while uploading tagLineFile, please try again" });
+                    //     return;
+                    // }
+                }).catch(e => console.error(e));
+            });
+        }
+
+        data.attachmentFile = uploadedFile;
+
+
+        if (data && data.coSponsor == 'false') {
+
+            data.csProgramDate = null
+            data.csSelectedPrograms = []
+        }
+        if (data && data.namingRights == 'false') {
+
+            data.nrProgramDate = null
+            data.nrSelectedPrograms = null
+        }
+        if (data && data.dayBranding == 'false') {
+
+            data.dbProgramDate = null
+
+        }
+        if (data && data.assocDayBranding == 'false') {
+
+            data.adbProgramDate = null
+
+        }
+
+
+        RadioNFCT.findById(data._id)
+            .then((exRadioNFCT) => {
+                if (exRadioNFCT) {
+                    RadioNFCT.findByIdAndUpdate(data._id, { $set: data }, { new: true })
+                        .then((newRadioNFCT) => {
+                            if (newRadioNFCT) {
+                                return res.json({ "status": true, "message": "Updated successfully." });
+                            } else {
+                                throw new Error("Does not exist.!!!");
+                            }
+                        }).catch((error) => {
+
+                            return res.json({ "status": false, "message": error.message });
+                        });
+                } else {
+                    throw new Error("Does not exist.!!!");
+                }
+            }).catch((error) => {
+
+                return res.json({ "status": false, "message": error.message });
+            });
+    } catch (e) {
+        console.error(e)
+        return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+    }
+};
+
+exports.fetchRadioNFCTDetail = (req, res) => {
+    try {
+        let data = req.params;
+
+        RadioNFCT.findById(data.id)
+            .then((exRadioNFCT) => {
+
+                return res.json({ "status": true, "data": exRadioNFCT });
+
+            }).catch((error) => {
+                return res.json({ "status": false, "message": error.message });
+            });
+    } catch (e) {
+        console.error(e)
+        return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+    }
+};
+exports.fetchRadioNFCTGenerated = (req, res) => {
+    try {
+        let data = req.params;
+
+        RadioNFCT.findById(data.id)
+        .select("roNumber isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId")
+            .then((exRadioNFCT) => {
+
+                return res.json({ "status": true, "data": exRadioNFCT });
+
+            }).catch((error) => {
+                return res.json({ "status": false, "message": error.message });
+            });
+    } catch (e) {
+        console.error(e)
+        return res.json({ "status": false, "message": "Oops! Something went wrong. Please try again later" });
+    }
+};
+
