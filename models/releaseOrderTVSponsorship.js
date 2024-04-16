@@ -33,6 +33,7 @@ const releaseOrderTVSponsorshipSchema = new Schema({
   clientRate: { type: Number },
   clientDiscountType: { type: String, enum: ["TenSecRate4Client", "flatDiscount4Client", "flatRate4Client"] },
   discountedValue4Client: { type: Number },
+  value4Client: { type: Number },
   clientBillingRate: { type: Number },
   gst4Client: { type: Number },
   nett4Client: { type: Number },

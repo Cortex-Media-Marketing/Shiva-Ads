@@ -331,7 +331,7 @@ exports.TVROFCTList = async (req, res) => {
             //     model: 'advtPositionSchema',
             //     select: 'advtPos'
             // })
-            .select("roNumber media client companyName channel agencyNameForBilling advertiserNameForBilling adDuration totalWithGST remindStatus isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId roDate").sort({ "roNumber": -1 });
+            .select("roNumber media client clientName clientId companyName channel agencyNameForBilling advertiserNameForBilling adDuration totalWithGST remindStatus isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId roDate").sort({ "roNumber": -1 });
 
         return res.json({ status: true, data: TVROs });
     } catch (error) {
@@ -596,7 +596,7 @@ exports.TVROSponsorshipList = async (req, res) => {
             //     model: 'advtPositionSchema',
             //     select: 'advtPos'
             // })
-            .select("roNumber media client companyName channel agencyNameForBilling advertiserNameForBilling adDuration totalWithGST remindStatus isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId roDate").sort({ "roNumber": -1 });
+            .select("roNumber media client clientName clientId companyName channel agencyNameForBilling advertiserNameForBilling adDuration totalWithGST remindStatus isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId roDate").sort({ "roNumber": -1 });
 
         return res.json({ status: true, data: TVROs });
     } catch (error) {

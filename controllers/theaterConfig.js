@@ -7,15 +7,16 @@ const awsHelper = require("../common/aws")
 const helper = require("../common/nommoc")
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3({
-    accessKeyId: 'AKIA3FLDZZEEA2CMDFNF',
-    secretAccessKey: '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',
-    region: 'us-east-1'
+    accessKeyId: config.shivaAdsAWS_S3.accessKeyId,
+    secretAccessKey: config.shivaAdsAWS_S3.secretAccessKey,
+    region: config.shivaAdsAWS_S3.region
   });
+ 
 
   const ses = new AWS.SES({ 
-    secretAccessKey:"qUHkU1ixZml1Bg2DmYCBKccP9qOyW8WOPjcCeJBV",
-    accessKeyId:"AKIA3FLDZZEELHUS6JTK",
-    region: "ap-south-1"
+    secretAccessKey: config.shivaAdsAWS_SES.secretAccessKey ,
+    accessKeyId: config.shivaAdsAWS_SES.accessKeyId ,
+    region: config.shivaAdsAWS_SES.region 
 })
 const puppeteer = require('puppeteer');
 const fs = require('fs');
@@ -213,22 +214,15 @@ exports.s3Upload = async (req, res) => {
         const AWS = require('aws-sdk');
         const nodemailer = require('nodemailer');
 
-        // AWS S3 configuration
+        // AWS S3 configuration.
         const s3 = new AWS.S3({
-            accessKeyId: 'AKIA3FLDZZEEA2CMDFNF',
-            secretAccessKey: 'AKIA3FLDZZEEA2CMDFNF',
-            region: 'us-east-1'
+          accessKeyId: config.shivaAdsAWS_S3.accessKeyId,
+          secretAccessKey: config.shivaAdsAWS_S3.secretAccessKey,
+          region: config.shivaAdsAWS_S3.region
         });
-
-        // Nodemailer transporter setup
-        // const transporter = nodemailer.createTransport({
-        //     service: 'gmail', // e.g., 'Gmail'
-        //     auth: {
-        //         user: 'gokulavarathan5@gmail.com',
-        //         pass: 'aruppukottai'
-        //     }
-        // });
-
+      
+      
+        
         // Function to upload file to S3
         async function uploadFileToS3(bucketName, key, file) {
             const params = {
@@ -268,8 +262,8 @@ exports.s3Upload = async (req, res) => {
         const objectKey = 'attachment.txt'; // Key for the file in S3
         const fileContents = 'Hello, this is a test file!'; // Contents of the file to upload
         const emailOptions = {
-            from: 'gokulavarathan5@gmail.com ',
-            to: 'gokul@cortexmarketing.in',
+            from: config.shivaAdsAWS_SES.email,
+            to: config.shivaAdsAWS_SES.email,
             subject: 'S3 Object Attachment',
             text: 'Attached is the file from S3.'
         };
@@ -330,29 +324,27 @@ exports.sendMailSES = async (req, res) => {
         
         
         const emailParams = {
-            from: 'pankaj@cortexmarketing.in',
-            to: 'gokul@cortexmarketing.in',
+            from: config.shivaAdsAWS_SES.email,
+            to: config.shivaAdsAWS_SES.email,
             subject: 'SES Email with S3 Attachment',
             text: '<h1>This is a test email sent from SES with an attachment from S3.</h1>'
           };
           
-        
+         
+          const ses = new AWS.SES({ 
+            secretAccessKey: config.shivaAdsAWS_SES.secretAccessKey ,
+            accessKeyId: config.shivaAdsAWS_SES.accessKeyId ,
+            region: config.shivaAdsAWS_SES.region 
+        })
          
 
-        const ses = new AWS.SES({
-          secretAccessKey:"BETniYVUfOBLoirnlrQpv2p8meqz15eeximqhuIL",
-        accessKeyId:"AKIA3FLDZZEEITOC24G7",
-          // secretAccessKey:"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",
-          // accessKeyId:"AKIA3FLDZZEELHUS6JTK",
-          region: "ap-south-1"
-        });
         sendEmailWithAttachment(emailParams, "data");
         async function sendEmailWithAttachment(emailParams,data) {
           const params = {
             Source: emailParams.from,
             Destinations: [emailParams.to],
             RawMessage: {
-              Data:  `From: gokul@cortexmarketing.in\n` +
+              Data:  `From: ${config.shivaAdsAWS_SES.email}\n` +
               `To: ${emailParams.to}\n` +
               `Subject: test subject\n` +
               `MIME-Version: 1.0\n` +
@@ -410,8 +402,8 @@ exports.sendMailLambda = async (req, res) => {
       }));
       
 
-        const fromMail="pankaj@cortexmarketing.in";
-        const toMail="gokul@cortexmarketing.in";
+        const fromMail=config.shivaAdsAWS_SES.email;
+        const toMail=config.shivaAdsAWS_SES.email;
 
         const attachmentParts = fileBase64.map(attachment => {
           return (
@@ -491,16 +483,17 @@ exports.sendMailLambda2 = async (req, res) => {
       );
     
       let transporter = nodemailer.createTransport({
-        SES: new AWS.SES({
-            secretAccessKey:"qUHkU1ixZml1Bg2DmYCBKccP9qOyW8WOPjcCeJBV",
-        accessKeyId:"AKIA3FLDZZEELHUS6JTK",
-        region: "ap-south-1"
-         }),
+       
+         ses : new AWS.SES({ 
+          secretAccessKey: config.shivaAdsAWS_SES.secretAccessKey ,
+          accessKeyId: config.shivaAdsAWS_SES.accessKeyId ,
+          region: config.shivaAdsAWS_SES.region 
+      })
       });
     
       let emailProps = await transporter.sendMail({
-        from: "pankaj@cortexmarketing.in",
-        to: "gokul@cortexmarketing.in",
+        from: config.shivaAdsAWS_SES.email,
+        to: config.shivaAdsAWS_SES.email,
         subject: "subject",
         text: "message",
         html: "<div>" + "message" + "</div>",
@@ -521,7 +514,7 @@ exports.sendPDFFRomS3 = async (req, res) => {
   
   const params = {
     Destination: {
-      ToAddresses: ['gokul@cortexmarketing.in']
+      ToAddresses: [config.shivaAdsAWS_SES.email]
     },
     Message: {
       Body: {
@@ -533,8 +526,8 @@ exports.sendPDFFRomS3 = async (req, res) => {
         Data: 'Invoice Attached'
       }
     },
-    Source: 'pankaj@cortexmarketing.in',
-    ReplyToAddresses: ['pankaj@cortexmarketing.in'],
+    Source: config.shivaAdsAWS_SES.email,
+    ReplyToAddresses: [config.shivaAdsAWS_SES.email],
     Attachments: [
       {
         Filename: 'invoice.pdf',
@@ -557,9 +550,7 @@ exports.sendPDFFRomS3 = async (req, res) => {
 exports.sendMailWithAtt  = async(req,res) =>{  
     try {
 
-      //sample response for attachment
-      // {"fileAttachment":[{"fileUrl":"https://generalasset.s3.amazonaws.com/SampleXLSFile_19kb.xls","fileName":"SampleXLSFile_19kb.xls"},{"fileUrl":"https://generalasset.s3.amazonaws.com/SampleDOCFile_100kb.doc","fileName":"SampleDOCFile_100kb.doc"},{"fileUrl":"https://generalasset.s3.amazonaws.com/SamplePNGImage_1mbmb.png","fileName":"SamplePNGImage_1mbmb.png"},{"fileUrl":"https://generalasset.s3.amazonaws.com/WhatsApp+Image+2024-03-28+at+7.05.49+PM.jpeg","fileName":"WhatsApp+Image.jpeg"},{"fileUrl":"https://generalasset.s3.amazonaws.com/mailtemp.html","fileName":"mailtemp.html"}],"receiverMailId":"gokul@cortexmarketing.in","mailSubject":"tesing mail subject"}      
-      
+
       const {fileAttachment,receiverMailId,mailSubject} = req.body
 
       const createMultiAttRaw = await Promise.all(fileAttachment.map(async (item, i) => {
@@ -607,7 +598,7 @@ exports.sendMailWithAtt  = async(req,res) =>{
 async function sendEmailWithAttachment(to, subject,  attachmentContent) {
   const rawEmail = await createRawEmail(to, subject,  attachmentContent);
   const params = {
-    Source: "gokul@cortexmarketing.in",
+    Source: config.shivaAdsAWS_SES.email,
     Destinations: [to],
     RawMessage: {
       Data: rawEmail
@@ -618,7 +609,7 @@ async function sendEmailWithAttachment(to, subject,  attachmentContent) {
 }
 
 function createRawEmail(to, subject, attachmentContent) {
-  const rawEmail = `From: gokul@cortexmarketing.in\n` +
+  const rawEmail = `From: ${config.shivaAdsAWS_SES.email}\n` +
       `To: ${to}\n` +
       `Subject: ${subject}\n` +
       `MIME-Version: 1.0\n` +
@@ -673,38 +664,6 @@ exports.htmlToPDF  = async(req,res) =>{
         await browser.close();
     }
 
-// async function htmlToPdf(htmlString, outputPath) {
-
-//     // const browser = await puppeteer.launch();
-//     // const page = await browser.newPage();
-//     // await page.setContent(htmlString);
-//     // await page.pdf({ path: outputPath });
-//     // await browser.close();
-
-//     const browser = await puppeteer.launch();
-//     const page = await browser.newPage();
-
-//     // Set the viewport size to fit the entire content without scrolling
-//     await page.setViewport({
-//         width: 1200, // Adjust the width as needed
-//         height: 800, // Adjust the height as needed
-//         deviceScaleFactor: 1,
-//     });
-
-//     // Set the HTML content of the page
-//     await page.setContent(htmlString);
-
-//     // Generate PDF from the page content
-//     await page.pdf({
-//         path: outputPath,
-//         format: 'A4',
-//         printBackground: true,
-//         displayHeaderFooter: false,
-//         margin: { top: '0px', bottom: '0px', left: '0px', right: '0px' },
-//     });
-
-//     await browser.close();
-// }
 
 async function uploadToS3(filePath, fileName, bucketName) {
     const fileContent = fs.readFileSync(filePath);
@@ -893,73 +852,6 @@ htmlToPdf(htmlString, outputPath)
 // return rawEmail;
 
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

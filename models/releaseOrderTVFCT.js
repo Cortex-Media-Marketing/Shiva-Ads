@@ -30,6 +30,7 @@ const releaseOrderTVFCTSchema = new Schema({
   //clientBilling: {
   clientRate: { type: Number },
   clientDiscountType: { type: String, enum: ["TenSecRate4Client", "flatDiscount4Client", "flatRate4Client"] },
+  value4Client: { type: Number },
   discountedValue4Client: { type: Number },
   clientBillingRate: { type: Number },
   gst4Client: { type: Number },

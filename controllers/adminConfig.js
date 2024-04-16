@@ -25,7 +25,7 @@ exports.uploadMultipleFiles = async (req, res) => {
         if (req.files && req.files.length != 0) {
             uploadedFiles = await Promise.all((req.files).map(async (file) => {
                 return await new Promise((resolve) => {
-                    console.log(file)
+                    //console.log(file)
                     fileUpload(file, (uploadData) => {
                         //console.log(uploadData)
                         if (uploadData.status) {
@@ -81,7 +81,6 @@ exports.register = (req, res) => {
                         }
                         let newTemp = nommoc.UpdateTemplate(temp, dataToReplace)
                         SendSMail(newTemp.body, newTemp.subject, [resp.email]);
-
                         return res.json({ "status": true, "message": "User added Successfully" });
                     })
 
@@ -214,7 +213,7 @@ exports.forgotPassword = async (req, res) => {
                 const template = newTemp.body, subject = newTemp.subject, mail = [dbUser.email]
 
                 //console.log(newTemp.body, newTemp.subject, [dbUser.email])
-                await SendSMail(template, subject, mail).then(() => {
+                await SendSMail(template, subject, mail).then((success) => {
                     res.json({ "status": true, "message": `Reset password link has been sent successfully to your email address` });
 
                 }).catch((e) => {
@@ -336,7 +335,9 @@ exports.ListOfContactType = async (req, res) => {
     }
 }
 
-//======================================    Designation ======================================================
+
+
+//====================================== Designation ======================================================
 
 exports.addDesignation = async (req, res) => {
 
@@ -375,7 +376,7 @@ exports.ListOfDesignation = async (req, res) => {
 
 
 
-//======================================      News Paper ======================================================
+//====================================== News Paper ======================================================
 
 exports.addNewsPaper = async (req, res) => {
 
@@ -449,7 +450,7 @@ exports.ListOfNewsPaper = async (req, res) => {
 }
 
 
-//======================================    News Paper Center  ======================================================
+//====================================== News Paper Center  ======================================================
 
 exports.addNewsPaperCenter = async (req, res) => {
 
@@ -524,7 +525,7 @@ exports.ListOfNewsPaperCenter = async (req, res) => {
 
 
 
-//======================================     Discount Category ======================================================
+//====================================== Discount Category ======================================================
 
 exports.addDiscountCategory = async (req, res) => {
 
