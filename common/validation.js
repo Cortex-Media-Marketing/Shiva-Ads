@@ -1398,7 +1398,7 @@ exports.Validation = (req, res, next) => {
       })
     }
 
-    else if (path == '/addTheatreVendor' ) {
+    else if (path == '/addTheatreVendor' || path == '/addOtherVendor') {
 
       schema = Joi.object({
 
@@ -1429,7 +1429,7 @@ exports.Validation = (req, res, next) => {
         }))
       });
     }
-    else if (path == '/updateTheatreVendor' ) {
+    else if (path == '/updateTheatreVendor' || path == '/updateOtherVendor') {
 
       schema = Joi.object({
         _id: Joi.string().required(),

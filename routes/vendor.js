@@ -80,6 +80,13 @@ Vendor.delete('/deleteTheatreVendor/:id',tokenMiddleVerify , deleteTheatreVendor
 
 Vendor.post('/addOtherVendor',tokenMiddleVerify,Validation, addOtherVendor); 
 
+Vendor.patch('/updateOtherVendor',tokenMiddleVerify ,Validation, updateOtherVendor); 
+
+Vendor.get('/OtherVendorInfo/:id',tokenMiddleVerify , fetchOtherVendor); 
+
+Vendor.post('/OtherVendorList',tokenMiddleVerify , listOfOtherVendors); 
+
+Vendor.delete('/deleteOtherVendor/:id',tokenMiddleVerify , deleteOtherVendor); 
 
 
 module.exports = Vendor;

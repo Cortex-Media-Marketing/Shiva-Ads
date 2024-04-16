@@ -71,6 +71,6 @@ const RadioVendor = mongoose.model('RadioVendor', tvVendorSchema, config.dbPrefi
 const OOHVendor = mongoose.model('OOHVendor', radioVendorSchema, config.dbPrefix + 'RODNEVHOO')
 const YouTubeVendor = mongoose.model('YouTubeVendor', youTubeSchema, config.dbPrefix + 'RODNEVEBUTUOY')
 const TheatreVendor = mongoose.model('TheatreVendor', theatreSchema, config.dbPrefix + 'RODNEVERTAEHT')
+const OtherVendor = mongoose.model('OtherVendor', theatreSchema, config.dbPrefix + 'RODNEVREHTO')
 
-
-module.exports = { NewsPaperVendor, TVVendor, RadioVendor,OOHVendor,YouTubeVendor,TheatreVendor }
+module.exports = { NewsPaperVendor, TVVendor, RadioVendor,OOHVendor,YouTubeVendor,TheatreVendor ,OtherVendor}

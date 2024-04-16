@@ -256,7 +256,18 @@ deleteTheatreVendor: (req, res) => {
 addOtherVendor: (req, res) => {
     exports.addVendor(req, res, OtherVendor);
 },
-
+updateOtherVendor: (req, res) => {
+    exports.updateVendorDetail(req, res, OtherVendor);
+},
+fetchOtherVendor: (req, res) => {
+    exports.fetchVendorDetail(req, res, OtherVendor);
+},
+listOfOtherVendors: (req, res) => {
+    exports.VendorList(req, res, OtherVendor);
+},
+deleteOtherVendor: (req, res) => {
+    exports.deleteVendor(req, res, OtherVendor);
+}
 };
 
 
