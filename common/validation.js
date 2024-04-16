@@ -528,7 +528,96 @@ exports.Validation = (req, res, next) => {
         shiftedRO: Joi.number().integer().min(1000000000).max(9999999999).optional()
       });
     }
-   
+    
+    else if (path == '/addTvRoSponsorship') {
+
+      schema = Joi.object({
+        roDate: Joi.string().required(),
+        companyName: Joi.string().required(),
+        clientName: Joi.string().required(),
+        clientId: Joi.string().required(),
+        channel: Joi.string().required(),
+        agencyNameForBilling: Joi.string(),
+        advertiserNameForBilling: Joi.string(),
+        brandName: Joi.string(),
+        campaignStartDate: Joi.date(),
+        campaignEndDate: Joi.date(),
+        campaignDays: Joi.number(),
+        ratePer10Secs: Joi.number(),
+        program: Joi.string(),
+        sponsorship: Joi.string(),
+        timeBand: Joi.string(),
+        adDuration: Joi.number(),
+        spotsPerDay: Joi.number(),
+        totalSpots: Joi.number(),
+        totalSeconds: Joi.number(),
+        nettAmount: Joi.number(),
+        gst: Joi.number(),
+        totalPayableAfterTaxes: Joi.number(),
+        tagLine: Joi.string(),
+        note: Joi.string(),
+        clientRate: Joi.number().required(),
+        clientDiscountType: Joi.string().valid("TenSecRate4Client", "flatDiscount4Client", "flatRate4Client"),
+        discountedValue4Client: Joi.number().optional(),
+        clientBillingRate: Joi.number(),
+        gst4Client: Joi.number(),
+        nett4Client: Joi.number(),
+        remindStatus: Joi.boolean().optional(),
+        isRoGenerated: Joi.boolean().optional(),
+        roUrl: Joi.string().optional().allow(''),
+        isClientRoGenerated: Joi.boolean().optional(),
+        isVendorRoGenerated: Joi.boolean().optional(),
+        clientRoUrl: Joi.string().optional().allow(''),
+        vendorRoUrl: Joi.string().optional().allow(''),
+        vendorId: Joi.string().optional().allow(''),
+      })
+
+
+    }
+    else if (path == '/updateTvRoSponsorship') {
+
+      schema = Joi.object({
+        _id: Joi.string().required(),
+        roDate: Joi.string().allow(''),
+        companyName: Joi.string().optional(),
+        clientName: Joi.string().optional(),
+        clientId: Joi.string().optional(),
+        channel: Joi.string().optional(),
+        agencyNameForBilling: Joi.string(),
+        advertiserNameForBilling: Joi.string(),
+        brandName: Joi.string(),
+        campaignStartDate: Joi.date(),
+        campaignEndDate: Joi.date(),
+        campaignDays: Joi.number(),
+        ratePer10Secs: Joi.number(),
+        program: Joi.string().optional(),
+        sponsorship: Joi.string().optional(),
+        timeBand: Joi.string(),
+        adDuration: Joi.number(),
+        spotsPerDay: Joi.number(),
+        totalSpots: Joi.number(),
+        totalSeconds: Joi.number(),
+        nettAmount: Joi.number(),
+        gst: Joi.number(),
+        totalPayableAfterTaxes: Joi.number(),
+        tagLine: Joi.string(),
+        note: Joi.string(),
+        clientRate: Joi.number().required(),
+        clientDiscountType: Joi.string().valid("TenSecRate4Client", "flatDiscount4Client", "flatRate4Client"),
+        discountedValue4Client: Joi.number().optional(),
+        clientBillingRate: Joi.number(),
+        gst4Client: Joi.number(),
+        nett4Client: Joi.number(),
+        remindStatus: Joi.boolean().optional(),
+        isRoGenerated: Joi.boolean().optional(),
+        roUrl: Joi.string().optional().allow(''),
+        isClientRoGenerated: Joi.boolean().optional(),
+        isVendorRoGenerated: Joi.boolean().optional(),
+        clientRoUrl: Joi.string().optional().allow(''),
+        vendorRoUrl: Joi.string().optional().allow(''),
+        vendorId: Joi.string().optional().allow(''),
+      });
+    }
     else if (path == '/addRadioFCT') {
 
       schema = Joi.object({
