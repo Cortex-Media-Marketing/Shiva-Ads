@@ -62,6 +62,15 @@ Vendor.patch('/updateYouTubeVendor',tokenMiddleVerify ,Validation, updateYouTube
 
 Vendor.get('/YouTubeVendorInfo/:id',tokenMiddleVerify , fetchYouTubeVendor); 
 
+Vendor.post('/YouTubeVendorList',tokenMiddleVerify , listOfYouTubeVendors); 
+
+Vendor.delete('/deleteYouTubeVendor/:id',tokenMiddleVerify , deleteYouTubeVendor); 
+
+
+Vendor.post('/addTheatreVendor',tokenMiddleVerify,Validation, addTheatreVendor); 
+
+Vendor.patch('/updateTheatreVendor',tokenMiddleVerify ,Validation, updateTheatreVendor); 
+
 
 
 module.exports = Vendor;

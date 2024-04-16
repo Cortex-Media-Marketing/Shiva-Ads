@@ -227,6 +227,20 @@ updateYouTubeVendor: (req, res) => {
 fetchYouTubeVendor: (req, res) => {
     exports.fetchVendorDetail(req, res, YouTubeVendor);
 },
+listOfYouTubeVendors: (req, res) => {
+    exports.VendorList(req, res, YouTubeVendor);
+},
+deleteYouTubeVendor: (req, res) => {
+    exports.deleteVendor(req, res, YouTubeVendor);
+},
+////////////////////////////////////////////////////////// Theatre Vendors //////////////////////////////////////////////
+
+addTheatreVendor: (req, res) => {
+    exports.addVendor(req, res, TheatreVendor);
+},
+updateTheatreVendor: (req, res) => {
+    exports.updateVendorDetail(req, res, TheatreVendor);
+},
 
 };
 
