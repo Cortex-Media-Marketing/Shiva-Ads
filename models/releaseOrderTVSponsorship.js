@@ -26,7 +26,7 @@ const releaseOrderTVSponsorshipSchema = new Schema({
   nettAmount: { type: Number },
   gst: { type: Number },
   totalPayableAfterTaxes: { type: Number },
-  tagline: { type: String },
+  tagLine: { type: String },
   attachedFile: { type: String },
   note: { type: String },
   //clientBilling: {

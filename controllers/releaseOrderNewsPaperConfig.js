@@ -340,7 +340,7 @@ exports.newsPaperROList = async (req, res) => {
             //     model: 'advtPositionSchema',
             //     select: 'advtPos'
             // })
-            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId isReleased isShifted isCancelled isReleased isShifted isCancelled").sort({ "roNumber": -1 });
+            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isRoGenerated roUrl isClientRoGenerated isVendorRoGenerated clientRoUrl vendorRoUrl vendorId isReleased isShifted isCancelled roDate createdAt").sort({ "roNumber": -1 });
             
         return res.json({ status: true, data: NewsPaperROs });
     } catch (error) {
@@ -451,7 +451,7 @@ exports.newsPaperROShiftCancelList = async (req, res) => {
 
 
         const NewsPaperROs = await NewsPaperRO.find(query)
-            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isReleased isShifted isCancelled").sort({ "roNumber": -1 });
+            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isReleased isShifted isCancelled  roDate createdAt").sort({ "roNumber": -1 });
 
         return res.json({ status: true, data: NewsPaperROs });
     } catch (error) {
@@ -541,7 +541,7 @@ exports.shiftedNewsPaperROList = async (req, res) => {
 
 
         const NewsPaperROs = await NewsPaperRO.find(query)
-            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isReleased isShifted isCancelled").sort({ "roNumber": -1 });
+            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isReleased isShifted isCancelled  roDate createdAt").sort({ "roNumber": -1 });
 
         return res.json({ status: true, data: NewsPaperROs });
     } catch (error) {
@@ -631,7 +631,7 @@ exports.cancelledNewsPaperROList = async (req, res) => {
 
 
         const NewsPaperROs = await NewsPaperRO.find(query)
-            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isReleased isShifted isCancelled").sort({ "roNumber": -1 });
+            .select("roNumber newsPaperName typeClientNameHere subAgent specialDiscount editionsYouSelected advtIssueOrMalarOrOthers malarType releaseDate heightInCM widthInCM sqCM advtHue advtPosition totalGST extra totalWithGST freeAds validity remindForNextYear isReleased isShifted isCancelled roDate createdAt").sort({ "roNumber": -1 });
 
         return res.json({ status: true, data: NewsPaperROs });
     } catch (error) {
